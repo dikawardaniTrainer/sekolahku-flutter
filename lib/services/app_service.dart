@@ -10,6 +10,6 @@ class AppService {
   static final UserRepository _userRepository = UserDummyRepository();
   static final StudentRepository _studentRepository = StudentDbRepository(_openHelper);
 
-  static StudentService get studentService => StudentService(_studentRepository);
+  static StudentService get studentService => StudentServiceImpl(_studentRepository);
   static UserService get userService => UserService(_userRepository);
 }

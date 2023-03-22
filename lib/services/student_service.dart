@@ -4,11 +4,22 @@ import 'package:sekolah_ku/repository/student_repository.dart';
 import 'package:sekolah_ku/services/exception/exception.dart';
 import 'package:sekolah_ku/util/logger.dart';
 
-class StudentService {
+abstract class StudentService {
+  Future<List<Student>> findAll();
+  Future<Student> findById(int id);
+  Future<void> save(Student student);
+  Future<void> delete(Student student);
+  Future<List<Student>> findByName(String name);
+  Future<void> update(Student student);
+}
+
+class StudentServiceImpl implements StudentService {
+
   final StudentRepository _studentRepository;
 
-  StudentService(this._studentRepository);
+  StudentServiceImpl(this._studentRepository);
 
+  @override
   Future<List<Student>> findAll() async {
     final results = await _studentRepository.findAll();
     if (results.isNotEmpty) {
@@ -18,6 +29,7 @@ class StudentService {
     throw NotFoundException("No data students has been saved in database");
   }
 
+  @override
   Future<Student> findById(int id) async {
     final found = await _studentRepository.findById(id);
 
@@ -25,6 +37,7 @@ class StudentService {
     throw NotFoundException("Student with id : $id not exist");
   }
 
+  @override
   Future<void> save(Student student) async {
     final isEmailExist = await _studentRepository.countByEmail(student.email) > 0;
     if (isEmailExist) {
@@ -33,6 +46,7 @@ class StudentService {
     await _studentRepository.save(student.toMap());
   }
 
+  @override
   Future<void> delete(Student student) async {
     final found = await _studentRepository.findById(student.id);
     if (found != null) {
@@ -43,6 +57,7 @@ class StudentService {
     throw NotFoundException("Student with id ${student.id} no longer exist");
   }
 
+  @override
   Future<List<Student>> findByName(String name) async {
     final founds = await _studentRepository.findByName(name);
 
@@ -51,6 +66,7 @@ class StudentService {
         .toList();
   }
 
+  @override
   Future<void> update(Student student) async {
     final found = await _studentRepository.findById(student.id);
 
