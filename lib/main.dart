@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/pages/login_page.dart';
 import 'package:sekolah_ku/pages/student_list_page.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/font_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
@@ -18,18 +18,16 @@ class MyApp extends StatelessWidget {
 
   MyApp({super.key});
 
-  Future<Widget> _determineFirstPage() {
-    return Future(() async {
-      Widget firstScreen = const LoginPage();
-      final isLoggedIn = await _userService.isLoggedIn();
+  Future<Widget> _determineFirstPage() async {
+    Widget firstScreen = const LoginPage();
+    final isLoggedIn = await _userService.isLoggedIn();
 
-      if (isLoggedIn) {
-        firstScreen = const StudentListPage();
-      }
+    if (isLoggedIn) {
+      firstScreen = const StudentListPage();
+    }
 
-      FlutterNativeSplash.remove();
-      return firstScreen;
-    });
+    FlutterNativeSplash.remove();
+    return firstScreen;
   }
 
   @override
