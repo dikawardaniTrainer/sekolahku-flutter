@@ -262,6 +262,102 @@ class _StudentFormPageState extends State<StudentFormPage> {
         });
   }
 
+  Widget _createForm() {
+    const gap = DimenRes.size_16;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(gap),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(child: InputField(
+                    label: StringRes.firstName,
+                    textInputType: TextInputType.text,
+                    controller: _firstNameCtrl,
+                    validator: (s) {
+                      return _validateName(s, StringRes.firstName);
+                    },
+                  )),
+                  const SizedBox(width: 8,),
+                  Expanded(child: InputField(
+                    label: StringRes.lastName,
+                    textInputType: TextInputType.text,
+                    controller: _lastNameCtrl,
+                    validator: (s) {
+                      return _validateName(s, StringRes.lastName);
+                    },
+                  ))
+                ],
+              ),
+              InputField(
+                label: StringRes.phoneNumber,
+                textInputType: TextInputType.phone,
+                validator: (s) { return _validatePhoneNumber(s); },
+                controller: _phoneNumberCtrl,
+                marginTop: gap,
+              ),
+              InputField(
+                label: StringRes.email,
+                textInputType: TextInputType.emailAddress,
+                validator: (s) { return _validateEmail(s); },
+                controller: _emailCtrl,
+                marginTop: gap,
+              ),
+              InputField(
+                label: StringRes.birthDate,
+                controller: _birthDateCtrl,
+                readOnly: true,
+                textInputType: TextInputType.none,
+                validator: (s) { return _validateBirthDate(s); },
+                marginTop: gap,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.date_range , color: Theme.of(context).primaryColor),
+                  onPressed: () { _showDatePickerDialog(); },
+                ),
+              ),
+              DropDown<String>(
+                label: StringRes.education,
+                controller: _selectedEducation,
+                options: educationOptions,
+                onDrawItem: (item) => Text(item),
+                marginTop: gap,
+                onChanged: (s) { _selectedEducation.value = s; },
+                validator: (s) { return _validateEducation(s); },
+              ),
+              RadioGroup(
+                label: StringRes.gender,
+                controller: _genderCtrl,
+                options: genderOptions,
+                onChanged: (s) { _genderCtrl.text = s; },
+                marginTop: gap,
+              ),
+              CheckBoxGroup(
+                label: StringRes.hobbies,
+                marginTop: gap,
+                selectedOptions: selectedHobbies,
+                options: hobiesOptions,
+                onChanged: (selectedOptions) {
+                  selectedHobbies = selectedOptions;
+                },
+              ),
+              InputField(
+                label: StringRes.address,
+                maxLine: 3,
+                controller: _addressCtrl,
+                textInputType: TextInputType.multiline,
+                validator: (s) { return _validateAddress(s); },
+                marginTop: gap,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -273,110 +369,23 @@ class _StudentFormPageState extends State<StudentFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    const gap = DimenRes.size_16;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_pageTitle),
         leading: const IconBackButton(),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(gap),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(child: InputField(
-                      label: StringRes.firstName,
-                      textInputType: TextInputType.text,
-                      controller: _firstNameCtrl,
-                      validator: (s) {
-                        return _validateName(s, StringRes.firstName);
-                      },
-                    )),
-                    const SizedBox(width: 8,),
-                    Expanded(child: InputField(
-                      label: StringRes.lastName,
-                      textInputType: TextInputType.text,
-                      controller: _lastNameCtrl,
-                      validator: (s) {
-                        return _validateName(s, StringRes.lastName);
-                      },
-                    ))
-                  ],
-                ),
-                InputField(
-                  label: StringRes.phoneNumber,
-                  textInputType: TextInputType.phone,
-                  validator: (s) { return _validatePhoneNumber(s); },
-                  controller: _phoneNumberCtrl,
-                  marginTop: gap,
-                ),
-                InputField(
-                  label: StringRes.email,
-                  textInputType: TextInputType.emailAddress,
-                  validator: (s) { return _validateEmail(s); },
-                  controller: _emailCtrl,
-                  marginTop: gap,
-                ),
-                InputField(
-                  label: StringRes.birthDate,
-                  controller: _birthDateCtrl,
-                  readOnly: true,
-                  textInputType: TextInputType.none,
-                  validator: (s) { return _validateBirthDate(s); },
-                  marginTop: gap,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.date_range , color: Theme.of(context).primaryColor),
-                    onPressed: () { _showDatePickerDialog(); },
-                  ),
-                ),
-                DropDown<String>(
-                  label: StringRes.education,
-                  controller: _selectedEducation,
-                  options: educationOptions,
-                  onDrawItem: (item) => Text(item),
-                  marginTop: gap,
-                  onChanged: (s) { _selectedEducation.value = s; },
-                  validator: (s) { return _validateEducation(s); },
-                ),
-                RadioGroup(
-                  label: StringRes.gender,
-                  controller: _genderCtrl,
-                  options: genderOptions,
-                  onChanged: (s) { _genderCtrl.text = s; },
-                  marginTop: gap,
-                ),
-                CheckBoxGroup(
-                  label: StringRes.hobbies,
-                  marginTop: gap,
-                  selectedOptions: selectedHobbies,
-                  options: hobiesOptions,
-                  onChanged: (selectedOptions) {
-                    selectedHobbies = selectedOptions;
-                  },
-                ),
-                InputField(
-                  label: StringRes.address,
-                  maxLine: 3,
-                  controller: _addressCtrl,
-                  textInputType: TextInputType.multiline,
-                  validator: (s) { return _validateAddress(s); },
-                  marginTop: gap,
-                ),
-                Button(
-                  label: _buttonTitle,
-                  onPressed: () { _save(); },
-                  marginTop: gap,
-                )
-              ],
+      body: Column(
+        children: [
+          Expanded(child: _createForm()),
+          Padding(
+            padding: const EdgeInsets.all(DimenRes.size_16),
+            child: Button(
+              label: _buttonTitle,
+              onPressed: () { _save(); },
             ),
-          ),
-        ),
-      ),
+          )
+        ],
+      )
     );
   }
 }
