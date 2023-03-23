@@ -45,7 +45,7 @@ class _StudentListState extends State<StudentList> {
 
   void _executeSelectedAction(String action, Student selected) {
     if (action == StringRes.edit) {
-      context.startEditStudentPage(selected)
+      context.startStudentFormPage(selected)
           .then((value) => refresh());
       return;
     }

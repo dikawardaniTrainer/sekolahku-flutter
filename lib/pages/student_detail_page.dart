@@ -33,7 +33,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
   void _startEditStudent() {
     final toEdit = currentStudent;
     if (toEdit != null) {
-      context.startEditStudentPage(toEdit)
+      context.startStudentFormPage(toEdit)
           .then((value) => refresh());
     }
   }

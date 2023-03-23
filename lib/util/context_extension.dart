@@ -8,14 +8,14 @@ import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 
-extension ContextExt on BuildContext {
+extension ViewExt on BuildContext {
   void _showSnackBar(String message, Color bgColor, Color textColor){
     SnackBar snackBar = SnackBar(
       duration: const Duration(seconds: 3),
       backgroundColor: bgColor,
       content: Text(
-        message,
-        style: TextStyle(color: textColor)
+          message,
+          style: TextStyle(color: textColor)
       ),
     );
     ScaffoldMessenger.of(this).showSnackBar(snackBar);
@@ -27,26 +27,6 @@ extension ContextExt on BuildContext {
 
   void showErrorSnackBar(String message) {
     _showSnackBar(message, ColorRes.red, ColorRes.white);
-  }
-
-  Future<dynamic> goToPage(
-      Widget destination,
-      { bool isRootPage = false, bool isScreenDialog = false}
-  ) {
-    final route = MaterialPageRoute(
-      fullscreenDialog: isScreenDialog,
-      builder: (BuildContext context) => destination
-    );
-
-    if (isRootPage) {
-      return Navigator.pushReplacement(this, route);
-    }
-
-    return Navigator.push(this, route);
-  }
-
-  void goBack<T extends Object?>([ T? result ]) {
-    Navigator.pop(this, result);
   }
 
   showConfirmationDialog(String title, String message, VoidCallback? onConfirmed) {
@@ -87,6 +67,44 @@ extension ContextExt on BuildContext {
         return alert;
       },
     );
+  }
+
+}
+
+extension ContextExt on BuildContext {
+
+  PageRoute<dynamic> createRoute(
+     Widget destination,
+     { bool isScreenDialog = false}
+  ) {
+   return MaterialPageRoute(
+       fullscreenDialog: isScreenDialog,
+       builder: (BuildContext context) => destination
+   );
+  }
+
+  Future<dynamic> goToPage(
+      Widget destination,
+      { bool isRootPage = false, bool isScreenDialog = false}
+  ) {
+    final route = createRoute(destination, isScreenDialog: isScreenDialog);
+    if (isRootPage) {
+      return Navigator.pushReplacement(this, route);
+    }
+    return Navigator.push(this, route);
+  }
+
+  Future<dynamic> goToPageWithRouteName(
+      String routeName,
+      Object? argument,
+      {bool isRootPage = false}
+  ) {
+    if (isRootPage) return Navigator.pushReplacementNamed(this, routeName, arguments: argument);
+    return Navigator.pushNamed(this, routeName, arguments: argument);
+  }
+
+  void goBack<T extends Object?>([ T? result ]) {
+    Navigator.pop(this, result);
   }
 
   void openLink(String link) {
