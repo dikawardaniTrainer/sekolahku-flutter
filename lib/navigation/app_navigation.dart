@@ -6,7 +6,7 @@ import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';
 import 'package:sekolah_ku/pages/student_list_page.dart';
 import 'package:sekolah_ku/pages/student_search_page.dart';
-import 'package:sekolah_ku/util/context_extension.dart';
+import 'package:sekolah_ku/util/navigation_extension.dart';
 
 class Routes {
   static const login = "/login";

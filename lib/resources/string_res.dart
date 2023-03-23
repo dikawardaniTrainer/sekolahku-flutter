@@ -1,4 +1,5 @@
 class StringRes {
+  static const noValue = "-";
   static const emptyString = "";
   static const appName = "Sekolah Ku";
   static const username = "Username";
@@ -28,6 +29,7 @@ class StringRes {
   static const ok = "Okay";
   static const cancel = "Cancel";
   static const update = "Update";
+  static const role = "Role";
 
   static const errEmailEmpty = "Email cannot be empty";
   static const errEmailInvalid = "Invalid email address";

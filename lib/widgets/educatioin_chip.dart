@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
-import 'package:sekolah_ku/util/widget_extension.dart';
 
 import '../constant/student_const.dart';
 
@@ -27,7 +26,7 @@ class EducationChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(DimenRes.size_8)
       ),
       child: Padding(
-        padding: Spaces.verticalAndHorizontal(horizontal: DimenRes.size_10, vertical: DimenRes.size_4),
+        padding: const EdgeInsets.symmetric(vertical: DimenRes.size_4, horizontal: DimenRes.size_10),
         child: Text(
           education,
           style: const TextStyle(color: ColorRes.white, fontSize: DimenRes.size_12, fontWeight: FontWeight.bold),

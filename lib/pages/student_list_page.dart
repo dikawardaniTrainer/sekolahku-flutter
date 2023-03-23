@@ -4,10 +4,10 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
-import 'package:sekolah_ku/util/context_extension.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
-import '../widgets/student_list.dart';
+import 'package:sekolah_ku/util/widget_extension.dart';
+import 'package:sekolah_ku/widgets/student_list.dart';
 
 class StudentListPage extends StatefulWidget {
   const StudentListPage({super.key});

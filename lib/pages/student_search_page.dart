@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/widgets/search_bar.dart';
-
-import '../widgets/student_list.dart';
+import 'package:sekolah_ku/widgets/student_list.dart';
 
 class StudentSearchPage extends StatefulWidget {
   const StudentSearchPage({

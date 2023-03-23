@@ -28,23 +28,21 @@ class UserDummyRepository implements UserRepository {
       String username,
       String password,
       int roleId
-  ) {
-    return Future(() {
-      try {
-        return _users.firstWhere((savedData) => savedData.password == password && savedData.username == username && savedData.role.id == roleId
-        );
-      } catch(e) {
-        return null;
-      }
-    });
+  ) async {
+    try {
+      return _users.firstWhere((savedData) => savedData.password == password && savedData.username == username && savedData.role.id == roleId
+      );
+    } catch(e) {
+      return null;
+    }
   }
 
   @override
-  Future<List<Role>> getRoles() {
-    return Future(() => [
+  Future<List<Role>> getRoles() async {
+    return [
       Role(id: 1, name: "Admin"),
       Role(id: 2, name: "Supervisor"),
       Role(id: 3, name: "Manager")
-    ]);
+    ];
   }
 }
