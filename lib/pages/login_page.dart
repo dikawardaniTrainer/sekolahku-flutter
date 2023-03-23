@@ -108,70 +108,66 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Widget createForm() {
-    return SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              const BannerHeader(
-                  iconData: IconRes.education,
-                  title: StringRes.appName
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(DimenRes.size_16),
-                  child: Column(
-                    children: [
-                      InputField(
-                          label: StringRes.username,
-                          controller: _usernameCtrl,
-                          prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
-                          validator: (input) {
-                            return _validateEmail(input);
-                          },
-                          textInputType: TextInputType.emailAddress),
-                      InputField(
-                        label: StringRes.password,
-                        controller: _passwordCtrl,
-                        prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
-                        marginTop: DimenRes.size_16,
-                        validator: (input) {
-                          return _validatePassword(input);
-                        },
-                        textInputType: TextInputType.text,
-                        obscureText: obscureText,
-                        suffixIcon: IconButton(
-                            icon: Icon(iconData),
-                            color: ColorRes.teal,
-                            onPressed: () { _updatePasswordVisibility(); }
-                        ),
-                      ),
-                      DropDown<Role?>(
-                        options: _roles,
-                        controller: _roleCtrl,
-                        label: StringRes.role,
-                        onDrawItem: (item) => Text(item != null ? item.name : ""),
-                        marginTop: DimenRes.size_16,
-                        validator: (s) { return _validateRole(s); },
-                        onChanged: (v) { _roleCtrl.value = v; }),
-                      Button(
-                          label: StringRes.login,
-                          marginTop: DimenRes.size_16,
-                          onPressed: () {
-                            _login();
-                          })
-                    ],
-                  )
-              )
-            ],
-          ),
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: createForm(),
+      body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const BannerHeader(
+                    iconData: IconRes.education,
+                    title: StringRes.appName
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(DimenRes.size_16),
+                    child: Column(
+                      children: [
+                        InputField(
+                            label: StringRes.username,
+                            controller: _usernameCtrl,
+                            prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
+                            validator: (input) {
+                              return _validateEmail(input);
+                            },
+                            textInputType: TextInputType.emailAddress),
+                        InputField(
+                          label: StringRes.password,
+                          controller: _passwordCtrl,
+                          prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
+                          marginTop: DimenRes.size_16,
+                          validator: (input) {
+                            return _validatePassword(input);
+                          },
+                          textInputType: TextInputType.text,
+                          obscureText: obscureText,
+                          suffixIcon: IconButton(
+                              icon: Icon(iconData),
+                              color: ColorRes.teal,
+                              onPressed: () { _updatePasswordVisibility(); }
+                          ),
+                        ),
+                        DropDown<Role?>(
+                            options: _roles,
+                            controller: _roleCtrl,
+                            label: StringRes.role,
+                            onDrawItem: (item) => Text(item != null ? item.name : ""),
+                            marginTop: DimenRes.size_16,
+                            validator: (s) { return _validateRole(s); },
+                            onChanged: (v) { _roleCtrl.value = v; }),
+                        Button(
+                            label: StringRes.login,
+                            marginTop: DimenRes.size_16,
+                            onPressed: () {
+                              _login();
+                            })
+                      ],
+                    )
+                )
+              ],
+            ),
+          ))
     );
   }
 }
