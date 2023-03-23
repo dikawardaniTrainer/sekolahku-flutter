@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/constant/validation_const.dart';
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
@@ -11,11 +12,8 @@ import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
-import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/input.dart';
-
-import '../constant/validation_const.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -33,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   var obscureText = true;
   var iconData = IconRes.eye;
+  List<Role> _roles = [];
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -98,13 +97,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _userService.getRoles().then((value) {
+      setState(() {
+        _roles = value;
+      });
+    });
     if (kDebugMode) {
       _usernameCtrl.text = "admin@rc.com";
       _passwordCtrl.text = "admin1";
     }
   }
 
-  Widget createForm(List<Role> roles) {
+  Widget createForm() {
     return SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -143,9 +147,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       DropDown<Role?>(
-                        options: roles,
+                        options: _roles,
                         controller: _roleCtrl,
-                        label: "Role",
+                        label: StringRes.role,
                         onDrawItem: (item) => Text(item != null ? item.name : ""),
                         marginTop: DimenRes.size_16,
                         validator: (s) { return _validateRole(s); },
@@ -167,16 +171,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Role>>(
-        future: _userService.getRoles(),
-        builder: (context, snapshot) {
-          final data = snapshot.data;
-          if (data != null) {
-            return createForm(data);
-          }
-          return const ContainerNoData(message: StringRes.errFetchRoles);
-        },
-      ),
+      body: createForm(),
     );
   }
 }

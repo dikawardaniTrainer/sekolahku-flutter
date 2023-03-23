@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
+import 'package:sekolah_ku/widgets/input.dart';
 
 class DropDown<T> extends StatefulWidget {
   final DropDownController<T> controller;
@@ -29,7 +30,9 @@ class _DropDownState<T> extends State<DropDown<T>> {
   @override
   void initState() {
     super.initState();
-    widget.controller.value ??= widget.options.first;
+    if (widget.options.isNotEmpty) {
+      widget.controller.value ??= widget.options.first;
+    }
   }
 
   @override
@@ -40,23 +43,31 @@ class _DropDownState<T> extends State<DropDown<T>> {
           SizedBox(
             height: widget.marginTop,
           ),
-        DropdownButtonFormField<T>(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: widget.validator,
-          value: widget.controller.value,
-          decoration: InputDecoration(
-            labelText: widget.label,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16))
+        if (widget.options.isNotEmpty)
+          DropdownButtonFormField<T>(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: widget.validator,
+            value: widget.controller.value,
+            decoration: InputDecoration(
+                labelText: widget.label,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16))
+            ),
+            items: widget.options
+                .map((e) => DropdownMenuItem<T>(value: e, child: widget.onDrawItem(e)))
+                .toList(),
+            onChanged: (s) {
+              if (s != null) {
+                widget.onChanged.call(s);
+              }
+            },
           ),
-          items: widget.options
-              .map((e) => DropdownMenuItem<T>(value: e, child: widget.onDrawItem(e)))
-              .toList(),
-          onChanged: (s) {
-            if (s != null) {
-              widget.onChanged.call(s);
-            }
-          },
-        )
+        if (widget.options.isEmpty)
+          InputField(
+            label: widget.label,
+            textInputType: TextInputType.none,
+            readOnly: true,
+            enabled: false,
+          )
       ],
     );
   }

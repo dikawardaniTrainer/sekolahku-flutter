@@ -37,9 +37,12 @@ class MyApp extends StatelessWidget {
     return FutureBuilder<bool>(
       future: _userService.isLoggedIn(),
       builder: (context, snapshot) {
-        final isLoggedIn = snapshot.data;
-        FlutterNativeSplash.remove();
-        return _startApp(context, isLoggedIn);
+        if (snapshot.connectionState == ConnectionState.done) {
+          final isLoggedIn = snapshot.data;
+          FlutterNativeSplash.remove();
+          return _startApp(context, isLoggedIn);
+        }
+        return Container();
       });
   }
 }
