@@ -42,6 +42,10 @@ extension NavigationExt on BuildContext {
     Navigator.pop(this, result);
   }
 
+  void goBackToFirstPage() {
+    Navigator.popUntil(this, (route) => route.isFirst);
+  }
+
   void openLink(String link) {
     if (link.isEmpty) return;
     if (Platform.isAndroid) {

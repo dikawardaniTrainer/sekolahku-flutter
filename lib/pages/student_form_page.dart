@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
+import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/constant/student_const.dart';
@@ -373,6 +374,12 @@ class _StudentFormPageState extends State<StudentFormPage> {
       appBar: AppBar(
         title: Text(_pageTitle),
         leading: const IconBackButton(),
+        actions: [
+          IconButton(
+            icon: const Icon(IconRes.home),
+            onPressed: () => context.goBackToFirstPage(),
+          )
+        ],
       ),
       body: Column(
         children: [

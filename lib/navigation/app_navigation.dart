@@ -38,25 +38,32 @@ extension AppNavigation on BuildContext {
 
   Future<dynamic> startStudentFormPage([Student? selectedStudent]) => _goToPage(Routes.studentForm, data: selectedStudent?.id);
 
-  Future<dynamic> startStudentListPage() => _goToPage(Routes.studentList, isRootPage: true);
+  Future<dynamic> startStudentListPage([bool isBack = false]) {
+    // if (isBack) return goBackToPageWithRouteName(Routes.studentList);
+    return _goToPage(Routes.studentList, isRootPage: true);
+  }
 
   Future<dynamic> startLoginPage() => _goToPage(Routes.login, isRootPage: true);
 
-  Widget? _getPage(String? routeName, Args args) {
+  Widget? _getPage(String? routeName, Object? args) {
     switch(routeName) {
       case Routes.studentList : return const StudentListPage();
       case Routes.studentSearch: return const StudentSearchPage();
       case Routes.login: return const LoginPage();
       case Routes.studentDetail:
-        final data = args.data;
-        if (data is int) {
-          return StudentDetailPage(id: data);
+        if (args is Args) {
+          final data = args.data;
+          if (data is int) {
+            return StudentDetailPage(id: data);
+          }
         }
         return null;
       case Routes.studentForm:
-        final data = args.data;
-        if (data is int) {
-          return StudentFormPage(studentIdToEdit: data);
+        if (args is Args) {
+          final data = args.data;
+          if (data is int) {
+            return StudentFormPage(studentIdToEdit: data);
+          }
         }
         return const StudentFormPage();
       default: return null;
@@ -65,11 +72,12 @@ extension AppNavigation on BuildContext {
 
   RouteFactory getRouteGenerator() => (settings) {
     final arg = settings.arguments;
-    if (arg is Args) {
-      final destination = _getPage(settings.name, arg);
-      if (destination != null) {
+    final destination = _getPage(settings.name, arg);
+    if (destination != null) {
+      if (arg is Args) {
         return createRoute(destination, isScreenDialog: arg.isScreenDialog);
       }
+      return createRoute(destination);
     }
     FlutterNativeSplash.remove();
     return null;
