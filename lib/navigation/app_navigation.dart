@@ -39,10 +39,7 @@ extension AppNavigation on BuildContext {
 
   Future<dynamic> startStudentFormPage([Student? selectedStudent]) => _goToPage(Routes.studentForm, data: selectedStudent?.id);
 
-  Future<dynamic> startStudentListPage([bool isBack = false]) {
-    // if (isBack) return goBackToPageWithRouteName(Routes.studentList);
-    return _goToPage(Routes.studentList, isRootPage: true);
-  }
+  Future<dynamic> startStudentListPage() => _goToPage(Routes.studentList, isRootPage: true);
 
   Future<dynamic> startLoginPage() => _goToPage(Routes.login, isRootPage: true);
 
