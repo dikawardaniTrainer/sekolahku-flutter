@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/model/student.dart';
+import 'package:sekolah_ku/navigation/args.dart';
+import 'package:sekolah_ku/navigation/routes.dart';
 import 'package:sekolah_ku/pages/login_page.dart';
 import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';
@@ -8,24 +10,6 @@ import 'package:sekolah_ku/pages/student_list_page.dart';
 import 'package:sekolah_ku/pages/student_search_page.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
-
-class Routes {
-  static const login = "/login";
-  static const studentList = "/studentList";
-  static const studentForm = "/studentForm";
-  static const studentDetail = "/studentDetail";
-  static const studentSearch = "/studentSearch";
-}
-
-class Args {
-  final bool isScreenDialog;
-  Object? data;
-
-  Args({
-    required this.isScreenDialog,
-    this.data
-  });
-}
 
 extension AppNavigation on BuildContext {
   Future<dynamic> _goToPage(

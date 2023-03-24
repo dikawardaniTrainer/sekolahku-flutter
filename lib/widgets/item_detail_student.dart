@@ -11,24 +11,22 @@ typedef OnOpenLink = void Function(String value);
 class ItemDetail {
   final IconData iconData;
   final String title;
-  final String value;
-  final String link;
+  final String? value;
+  final String? link;
 
   ItemDetail(this.iconData, this.title, this.value, {this.link = StringRes.emptyString});
 
   static List<ItemDetail> createListItemDetailFrom(Student? student) {
     final List<ItemDetail> itemDetails = [];
 
-    if (student != null) {
-      itemDetails.add(ItemDetail(IconRes.name, StringRes.fullName, student.fullName));
-      itemDetails.add(ItemDetail(IconRes.phone, StringRes.phoneNumber, student.phoneNumber));
-      itemDetails.add(ItemDetail(IconRes.email, StringRes.email, student.email));
-      itemDetails.add(ItemDetail(IconRes.date, StringRes.birthDate, student.birthDate.format()));
-      itemDetails.add(ItemDetail(IconRes.education, StringRes.education, student.education));
-      itemDetails.add(ItemDetail(IconRes.gender, StringRes.gender, student.gender));
-      itemDetails.add(ItemDetail(IconRes.hobbies, StringRes.hobbies, student.hobbies.join(", ")));
-      itemDetails.add(ItemDetail(IconRes.location, StringRes.address, student.address, link: student.gmapsLink));
-    }
+    itemDetails.add(ItemDetail(IconRes.name, StringRes.fullName, student?.fullName));
+    itemDetails.add(ItemDetail(IconRes.phone, StringRes.phoneNumber, student?.phoneNumber));
+    itemDetails.add(ItemDetail(IconRes.email, StringRes.email, student?.email));
+    itemDetails.add(ItemDetail(IconRes.date, StringRes.birthDate, student?.birthDate?.format()));
+    itemDetails.add(ItemDetail(IconRes.education, StringRes.education, student?.education));
+    itemDetails.add(ItemDetail(IconRes.gender, StringRes.gender, student?.gender));
+    itemDetails.add(ItemDetail(IconRes.hobbies, StringRes.hobbies, student?.hobbies.join(", ")));
+    itemDetails.add(ItemDetail(IconRes.location, StringRes.address, student?.address, link: student?.gmapsLink));
 
     return itemDetails;
   }
@@ -53,8 +51,9 @@ class ItemDetailStudent extends StatelessWidget {
       fontStyle: FontStyle.italic
     );
 
-    if (itemDetail.value.isNotEmpty) {
-      valueToShow = itemDetail.value;
+    final value = itemDetail.value;
+    if (value != null && value.isNotEmpty) {
+      valueToShow = value;
       valueStyles = const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: DimenRes.size_18,
@@ -62,6 +61,7 @@ class ItemDetailStudent extends StatelessWidget {
       );
     }
 
+    final link = itemDetail.link;
     return Padding(
       padding: const EdgeInsets.all(DimenRes.size_10),
       child: Row(
@@ -79,9 +79,9 @@ class ItemDetailStudent extends StatelessWidget {
                 style: valueStyles,
                 overflow: TextOverflow.clip,
               ),
-              if (itemDetail.link.isNotEmpty) InkWell(
-                onTap: () { onGMapLinkTapped?.call(itemDetail.link); },
-                child: Text(itemDetail.link, style: const TextStyle(
+              if (link != null && link.isNotEmpty) InkWell(
+                onTap: () { onGMapLinkTapped?.call(link); },
+                child: Text(link, style: const TextStyle(
                   color: Colors.blue,
                   fontStyle: FontStyle.italic,
                 )),
