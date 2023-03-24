@@ -12,8 +12,10 @@ import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
+import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/input.dart';
+import 'package:sekolah_ku/widgets/loading_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
 
   var obscureText = true;
   var iconData = IconRes.eye;
-  List<Role> _roles = [];
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Widget _createForm() {
+  Widget _createForm(List<Role> roles) {
     return SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -133,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       DropDown<Role?>(
-                          options: _roles,
+                          options: roles,
                           controller: _roleCtrl,
                           label: StringRes.role,
                           onDrawItem: (item) => Text(item != null ? item.name : ""),
@@ -148,14 +149,38 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
+  Widget _createContent(List<Role> roles) {
+    return Column(
+      children: [
+        Expanded(child: _createForm(roles)),
+        Padding(
+          padding: const EdgeInsets.all(DimenRes.size_16),
+          child: Button(
+              label: StringRes.login,
+              marginTop: DimenRes.size_16,
+              onPressed: () {
+                _login();
+              }),
+        )
+      ],
+    );
+  }
+
+  Widget _createContentWithLoading() {
+    return Stack(
+      children: [
+        _createContent([]),
+        const LoadingDialog(
+          backgroundColor: ColorRes.black,
+          backgroundOpacity: 0.3,
+        )
+      ],
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _userService.getRoles().then((value) {
-      setState(() {
-        _roles = value;
-      });
-    });
     if (kDebugMode) {
       _usernameCtrl.text = "admin@rc.com";
       _passwordCtrl.text = "admin1";
@@ -165,20 +190,14 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(child: _createForm()),
-          Padding(
-            padding: const EdgeInsets.all(DimenRes.size_16),
-            child: Button(
-                label: StringRes.login,
-                marginTop: DimenRes.size_16,
-                onPressed: () {
-                  _login();
-                }),
-          )
-        ],
-      )
+      body: CustomFutureBuilder<List<Role>>(
+        future: _userService.getRoles(),
+        noDataWidget: _createContent([]),
+        loadingWidget: _createContentWithLoading(),
+        onShowDataWidget: (data) {
+          return _createContent(data);
+        },
+      ),
     );
   }
 }
