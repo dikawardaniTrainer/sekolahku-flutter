@@ -5,12 +5,14 @@ import 'package:sekolah_ku/resources/string_res.dart';
 
 class LoadingDialog extends StatelessWidget {
   final String message;
+  final Color messageColor;
   final Color backgroundColor;
   final double backgroundOpacity;
 
   const LoadingDialog({
     super.key,
     this.message = StringRes.emptyString,
+    this.messageColor = ColorRes.black,
     this.backgroundColor = ColorRes.transparent,
     this.backgroundOpacity = 0
   });
@@ -19,7 +21,7 @@ class LoadingDialog extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: DimenRes.size_16),
-        Text(message)
+        Text(message, style: TextStyle(color: messageColor))
       ],
     );
   }

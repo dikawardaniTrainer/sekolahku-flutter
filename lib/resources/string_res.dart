@@ -33,6 +33,7 @@ class StringRes {
   static const retry = "Retry";
 
   static const loadingStudents = "Loading students data";
+  static const loadingDetailStudent = "Loading detail student";
 
   static const errEmailEmpty = "Email cannot be empty";
   static const errEmailInvalid = "Invalid email address";
