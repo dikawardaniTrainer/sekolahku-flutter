@@ -4,7 +4,6 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
-import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/student_list.dart';
@@ -46,10 +45,8 @@ class _StudentListPageState extends State<StudentListPage> {
         ],
       ),
       body: StudentList(
-        onFetchingData: () => _studentService.findAll().catchError((e, s) {
-          context.showErrorSnackBar(e.toString());
-          debugError(e, s);
-        }),
+        onErrorFuture: (e, s) => context.showErrorSnackBar(e.toString()),
+        onFetchingData: () => _studentService.findAll(),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(

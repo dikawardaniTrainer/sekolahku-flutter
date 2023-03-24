@@ -31,6 +31,8 @@ class StringRes {
   static const update = "Update";
   static const role = "Role";
 
+  static const loadingStudents = "Loading students data";
+
   static const errEmailEmpty = "Email cannot be empty";
   static const errEmailInvalid = "Invalid email address";
   static const errPasswordEmpty = "Password cannot be empty";
