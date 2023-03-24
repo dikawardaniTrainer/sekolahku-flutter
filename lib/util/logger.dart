@@ -11,3 +11,9 @@ void debug(Object message) {
 void debugError(error, stackTrace) {
   debug("$error\n$stackTrace");
 }
+
+void debugAction(String action, Object message) {
+  debug("""
+Action => $action
+$message""");
+}

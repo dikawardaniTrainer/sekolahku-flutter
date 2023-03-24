@@ -3,14 +3,26 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
+import 'package:sekolah_ku/widgets/button.dart';
 
 class ContainerNoData extends StatelessWidget {
   final String message;
+  final VoidCallback? onRefreshClicked;
 
   const ContainerNoData({
     super.key,
-    required this.message
+    required this.message,
+    this.onRefreshClicked
   });
+
+  Widget _createRetryContainer() {
+    return Column(
+      children: [
+        const SizedBox(height: DimenRes.size_8,),
+        Button(label: StringRes.retry, isExpanded: false, onPressed: onRefreshClicked!)
+      ],
+    )  ;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +43,8 @@ class ContainerNoData extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-              )
+              ),
+              if (onRefreshClicked != null) _createRetryContainer()
             ],
           ),
         )

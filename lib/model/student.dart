@@ -24,19 +24,24 @@ class Student {
 
   @override
   String toString() {
-    return """
-    Id : $id
-    First name : $firstname
-    Last name : $lastname
-    Phone number : $phoneNumber
-    Email : $email
-    Birthdate : ${birthDate.format()}
-    Education : $education
-    Gender: $gender
-    Hobbies : ${hobbies.join(", ")}
-    Address : $address
-    """;
+    return {
+      "Id": id,
+      "First name": firstname,
+      "Last name": lastname,
+      "Phone number": phoneNumber,
+      "Email": email,
+      "Birthdate": birthDate.format(),
+      "Education": education,
+      "Gender": gender,
+      "Hobbies": hobbies.join(", "),
+      "Address": address
+    }.toString();
   }
 
-  bool equal(Student other) => toString() == other.toString();
+  @override
+  bool operator == (dynamic other) =>
+      other != null && other is Student && other.toString() == toString();
+
+  @override
+  int get hashCode => Object.hash(id, email);
 }

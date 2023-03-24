@@ -84,7 +84,7 @@ class _StudentListState extends State<StudentList> with TickerProviderStateMixin
     return CustomFutureBuilder(
       future: widget.onFetchingData.call(),
       loadingWidget: const LoadingDialog(message: StringRes.loadingStudents),
-      noDataWidget: const ContainerNoData(message: StringRes.errNoDataStudents),
+      noDataWidget: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => refresh()),
       onErrorFuture: widget.onErrorFuture,
       onShowDataWidget: (data) {
         _students.clear();

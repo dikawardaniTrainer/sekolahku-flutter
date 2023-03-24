@@ -30,6 +30,7 @@ class StringRes {
   static const cancel = "Cancel";
   static const update = "Update";
   static const role = "Role";
+  static const retry = "Retry";
 
   static const loadingStudents = "Loading students data";
 

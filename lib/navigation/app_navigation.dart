@@ -6,6 +6,7 @@ import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';
 import 'package:sekolah_ku/pages/student_list_page.dart';
 import 'package:sekolah_ku/pages/student_search_page.dart';
+import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 
 class Routes {
@@ -46,6 +47,7 @@ extension AppNavigation on BuildContext {
   Future<dynamic> startLoginPage() => _goToPage(Routes.login, isRootPage: true);
 
   Widget? _getPage(String? routeName, Object? args) {
+    debug("Get page for route $routeName");
     switch(routeName) {
       case Routes.studentList : return const StudentListPage();
       case Routes.studentSearch: return const StudentSearchPage();
