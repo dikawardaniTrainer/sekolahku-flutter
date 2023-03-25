@@ -41,9 +41,12 @@ class _StudentListState extends State<StudentList> with TickerProviderStateMixin
   }
 
   void _showConfirmationDelete(Student selected) {
-    context.showConfirmationDialog(StringRes.deleteStudent, sprintf(StringRes.confirmDeleteStudent, [selected.fullName]), () {
-      _delete(selected);
-    });
+    context.showConfirmationDialog(
+        title : StringRes.deleteStudent,
+        message: sprintf(StringRes.confirmDeleteStudent, [selected.fullName]),
+        cancelAble: false,
+        onConfirmed: () => _delete(selected)
+    );
   }
 
   void _executeSelectedAction(String action, Student selected) {

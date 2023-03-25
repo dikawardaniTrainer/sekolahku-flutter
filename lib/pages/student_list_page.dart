@@ -25,11 +25,12 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void _showConfirmationLogout() {
-    context.showConfirmationDialog(StringRes.logout, StringRes.confirmLogout, () {
-      _logout();
-    });
+    context.showConfirmationDialog(
+        title: StringRes.logout,
+        message: StringRes.confirmLogout,
+        onConfirmed: () => _logout()
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {

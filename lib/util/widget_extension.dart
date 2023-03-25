@@ -23,9 +23,16 @@ extension ViewExt on BuildContext {
     _showSnackBar(message, ColorRes.red, ColorRes.white);
   }
 
-  showConfirmationDialog(String title, String message, VoidCallback? onConfirmed, [VoidCallback? onCancel]) {
+  showConfirmationDialog({
+    required String title,
+    required String message,
+    VoidCallback? onConfirmed,
+    bool cancelAble = true,
+    VoidCallback? onCancel
+  }) {
     showDialog(
       context: this,
+      barrierDismissible: cancelAble,
       builder: (BuildContext context) {
         return ConfirmationDialog(
           title: title,
@@ -36,4 +43,6 @@ extension ViewExt on BuildContext {
       },
     );
   }
+
+
 }
