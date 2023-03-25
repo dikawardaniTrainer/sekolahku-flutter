@@ -1,59 +1,58 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/user.dart';
-import '../repository/user_repository.dart';
+import 'package:sekolah_ku/model/user.dart';
+import 'package:sekolah_ku/pref/user_pref.dart';
+import 'package:sekolah_ku/repository/user_repository.dart';
+import 'package:sekolah_ku/util/logger.dart';
 
 class UserService {
-  String keySession = "TOKEN";
   final UserRepository _userRepository;
+  final UserPref _userPref;
 
-  UserService(this._userRepository);
+  UserService(
+      this._userRepository,
+      this._userPref
+  );
 
-  Future<void> _saveSession(String token) {
-    return Future(() async {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString(keySession, token);
-    });
+  Future<void> _saveSession(String token) async {
+    debugAction("Save session", "Saving session for token : $token");
+    await _userPref.save(token);
+    debugAction("Save session", "Session saved");
   }
 
-  Future<void> _clearSession() {
-    return Future(() async {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString(keySession, "");
-    });
+  Future<void> _clearSession() async {
+    await _userPref.clear();
+    debugAction("Clear session", "Session cleared");
   }
 
   Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(keySession);
-    bool loggedIn = false;
-
-    if (token != null && token.isNotEmpty) {
-      loggedIn = true;
-    }
-
-    return Future.value(loggedIn);
+    final savedToken = await _userPref.getToken();
+    debugAction("Is logged in", "Saved token : $savedToken");
+    final isLoggedIn = savedToken != null;
+    debugAction("Is logged in", "Already logged in ? $isLoggedIn");
+    return isLoggedIn;
   }
 
-  Future<User> login(String username, String password, Role role) {
-    return Future(() async {
-      final found = await _userRepository.findByNameAndPassword(username, password, role.id);
-      if (found != null) {
-        _saveSession(username);
-        return Future.value(found);
-      }
-      throw Exception("Username or password are wrong");
-    });
+  Future<User> login(String username, String password, Role role) async {
+    debugAction("Login", "Get user for username: $username, pass: $password, role: $role");
+    final found = await _userRepository.findByNameAndPassword(username, password, role.id);
+    debugAction("Login", "Found user : $found");
+    if (found != null) {
+      _saveSession(username);
+      return found;
+    }
+    throw Exception("Username or password are wrong");
   }
 
   Future<void> logout() async {
-    return Future(() async {
-      if (!await isLoggedIn()) {
+    if (!await isLoggedIn()) {
       throw Exception("No user has been logged in");
-      }
-      _clearSession();
-    });
+    }
+    await _clearSession();
+    debugAction("Logout", "Logout success");
   }
 
-  Future<List<Role>> getRoles() => _userRepository.getRoles();
+  Future<List<Role>> getRoles() async {
+    final roles = await _userRepository.getRoles();
+    debugAction("Get roles", "Found roles : $roles");
+    return roles;
+  }
 }
