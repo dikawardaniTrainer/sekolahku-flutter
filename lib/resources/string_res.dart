@@ -1,3 +1,5 @@
+import 'package:sprintf/sprintf.dart';
+
 class StringRes {
   static const noValue = "-";
   static const emptyString = "";
@@ -41,7 +43,7 @@ class StringRes {
   static const errPasswordEmpty = "Password cannot be empty";
   static const errPasswordInvalid = "Password must be 6 character or more";
   static const errSomeInputInvalid = "Your input is still not valid, please fix it first before continue";
-  static const errorStudentIdNotFound = "Data student with id : %s is not found";
+  static const _errorStudentIdNotFound = "Data student with id : %s is not found";
   static const errFieldEmpty = "%s cannot be empty";
   static const errSpecialCharacter = "Special character rejected";
   static const errPhoneNumberEmpty = "Phone number cannot be empty";
@@ -66,5 +68,9 @@ class StringRes {
   static const successDeleteStudent = "Data student has been deleted successfully";
 
   static const confirmLogout = "Are you sure want to logout ?";
-  static const confirmDeleteStudent = "Are you sure want to delete %s ?";
+  static const _confirmDeleteStudent = "Are you sure want to delete %s ?";
+
+  static String messageErrorStudentIdNotFound(int id) => sprintf(_errorStudentIdNotFound, [id]);
+
+  static String messageConfirmDeleteStudent(String fullName) => sprintf(_confirmDeleteStudent, [fullName]);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/model/student.dart';
+import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
@@ -14,9 +15,11 @@ import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/checkbox_group.dart';
+import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
 import 'package:sekolah_ku/widgets/input.dart';
+import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/radio_group.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -237,30 +240,17 @@ class _StudentFormPageState extends State<StudentFormPage> {
     });
   }
 
-  void _showOldStudentData(Student oldStudent) {
-    setState(() {
-      _birthDateCtrl.text = oldStudent.birthDate.format();
-      _firstNameCtrl.text = oldStudent.firstname;
-      _lastNameCtrl.text = oldStudent.lastname;
-      _phoneNumberCtrl.text = oldStudent.phoneNumber;
-      _emailCtrl.text = oldStudent.email;
-      _addressCtrl.text = oldStudent.address;
+  void _setOldStudentData(Student oldStudent) {
+    _birthDateCtrl.text = oldStudent.birthDate.format();
+    _firstNameCtrl.text = oldStudent.firstname;
+    _lastNameCtrl.text = oldStudent.lastname;
+    _phoneNumberCtrl.text = oldStudent.phoneNumber;
+    _emailCtrl.text = oldStudent.email;
+    _addressCtrl.text = oldStudent.address;
 
-      _genderCtrl.text = oldStudent.gender;
-      _selectedEducation.value = oldStudent.education;
-      selectedHobbies = oldStudent.hobbies;
-    });
-  }
-
-  void findStudentToEdit(int id) {
-    _studentService.findById(id)
-        .then((value) => _showOldStudentData(value))
-        .catchError((e, s) {
-          context.showErrorSnackBar(
-            sprintf(StringRes.errorStudentIdNotFound, [id])
-          );
-          debugError(e, s);
-        });
+    _genderCtrl.text = oldStudent.gender;
+    _selectedEducation.value = oldStudent.education;
+    selectedHobbies = oldStudent.hobbies;
   }
 
   Widget _createForm() {
@@ -359,40 +349,75 @@ class _StudentFormPageState extends State<StudentFormPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    final id = widget.studentIdToEdit;
-    if (_isEditMode) {
-      findStudentToEdit(id);
-    }
+  Widget _createPage(Widget body) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(_pageTitle),
+          leading: const IconBackButton(),
+          actions: [
+            IconButton(
+              icon: const Icon(IconRes.home),
+              onPressed: () => context.goBackToFirstPage(),
+            )
+          ],
+        ),
+        body: body
+    );
+  }
+
+  Widget _createPageContent() {
+    return Column(
+      children: [
+        Expanded(child: _createForm()),
+        Padding(
+          padding: const EdgeInsets.all(DimenRes.size_16),
+          child: Button(
+            label: _buttonTitle,
+            onPressed: () { _save(); },
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _createPageContentWithLoading() {
+    return Stack(
+      children: [
+        _createPageContent(),
+        const LoadingDialog(message: StringRes.loadingDetailStudent)
+      ],
+    );
+  }
+
+  Widget _createPageContentNoData() {
+    return Stack(
+      children: [
+        _createPageContent(),
+        const Opacity(
+          opacity: 0.3,
+          child: ModalBarrier(dismissible: false, color: ColorRes.black),
+        ),
+      ],
+    );
+  }
+
+  Widget _createPageContentWithData(Student student) {
+    _setOldStudentData(student);
+    return _createPageContent();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_pageTitle),
-        leading: const IconBackButton(),
-        actions: [
-          IconButton(
-            icon: const Icon(IconRes.home),
-            onPressed: () => context.goBackToFirstPage(),
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(child: _createForm()),
-          Padding(
-            padding: const EdgeInsets.all(DimenRes.size_16),
-            child: Button(
-              label: _buttonTitle,
-              onPressed: () { _save(); },
-            ),
-          )
-        ],
-      )
-    );
+    if (_isEditMode) {
+      final id = widget.studentIdToEdit;
+      return _createPage(CustomFutureBuilder(
+        future: _studentService.findById(id),
+        onShowDataWidget: (data) => _createPageContentWithData(data),
+        noDataWidget: _createPageContentNoData(),
+        loadingWidget: _createPageContentWithLoading(),
+        onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.messageErrorStudentIdNotFound(id))
+      ));
+    }
+    return _createPage(_createPageContent());
   }
 }

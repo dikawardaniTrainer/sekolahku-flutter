@@ -11,7 +11,6 @@ import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/item_synopsis_student.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
-import 'package:sprintf/sprintf.dart';
 
 typedef OnGetService<T> = T Function();
 
@@ -43,7 +42,7 @@ class _StudentListState extends State<StudentList> with TickerProviderStateMixin
   void _showConfirmationDelete(Student selected) {
     context.showConfirmationDialog(
         title : StringRes.deleteStudent,
-        message: sprintf(StringRes.confirmDeleteStudent, [selected.fullName]),
+        message: StringRes.messageConfirmDeleteStudent(selected.fullName),
         cancelAble: false,
         onConfirmed: () => _delete(selected)
     );

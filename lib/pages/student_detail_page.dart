@@ -14,7 +14,6 @@ import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
 import 'package:sekolah_ku/widgets/item_detail_student.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
-import 'package:sprintf/sprintf.dart';
 
 class StudentDetailPage extends StatefulWidget {
   final int id;
@@ -93,7 +92,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
           future: _studentService.findById(widget.id),
           loadingWidget: _createLoading(),
           noDataWidget: _createDetail(null),
-          onErrorFuture: (e, s) => context.showErrorSnackBar(sprintf(StringRes.errorStudentIdNotFound, [widget.id.toString()])),
+          onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.messageErrorStudentIdNotFound(widget.id)),
           onShowDataWidget: (data) => _createDetail(data),
       ),
       floatingActionButton: FloatingActionButton(
