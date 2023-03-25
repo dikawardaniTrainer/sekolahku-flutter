@@ -11,7 +11,6 @@ import 'package:sekolah_ku/util/common_extension.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/constant/validation_const.dart';
-import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/checkbox_group.dart';
@@ -171,38 +170,43 @@ class _StudentFormPageState extends State<StudentFormPage> {
 
   void _saveNewData() {
     var student = _collectInput();
-    _studentService.save(student)
-        .then((value) {
+    context.showLoadingDialog(
+        message: StringRes.loadingSaveStudent,
+        future: _studentService.save(student),
+        onGetResult: (data) {
           context.showSuccessSnackBar(StringRes.successSaveStudent);
           context.goBack();
-        }).catchError((e, s) {
+        },
+        onGetError: (e, s) {
           var errorMessage = StringRes.errSaveNewStudent;
           if (e is DuplicateEmailException) {
             errorMessage = StringRes.errEmailExisted;
           }
           context.showErrorSnackBar(errorMessage);
-          debugError(e, s);
-        });
+        }
+    );
   }
 
   void _updateData(int id) {
     var student = _collectInput();
     student.id = id;
-    _studentService.update(student)
-        .then((value) {
+    context.showLoadingDialog(
+        message: StringRes.loadingUpdateStudent,
+        future: _studentService.update(student),
+        onGetResult: (data) {
           context.showSuccessSnackBar(StringRes.successUpdateStudent);
           context.goBack();
-        }).catchError((e, s) {
+        },
+        onGetError: (e, s) {
           String message;
           if (e is NoDataChangedException) {
             message = StringRes.errUpdateNoDataChanged;
           } else {
             message = StringRes.errUpdateStudent;
           }
-
           context.showErrorSnackBar(message);
-          debugError(e, s);
-        });
+        }
+    );
   }
 
   void _save() {
@@ -384,7 +388,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
     return Stack(
       children: [
         _createPageContent(),
-        const LoadingDialog(message: StringRes.loadingDetailStudent)
+        const LoadingBlocker(message: StringRes.loadingDetailStudent)
       ],
     );
   }

@@ -76,7 +76,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
     return Stack(
       children: [
         _createDetail(null),
-        const LoadingDialog(message: StringRes.loadingDetailStudent)
+        const LoadingBlocker(message: StringRes.loadingDetailStudent)
       ],
     );
   }

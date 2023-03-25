@@ -8,7 +8,6 @@ import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
-import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
@@ -74,11 +73,12 @@ class _LoginPageState extends State<LoginPage> {
     final role = _roleCtrl.value;
 
     if (isValid != null && isValid && role != null) {
-      _userService.login(username, password, role).then((value) => context.startStudentListPage())
-          .catchError((e, s) {
-            context.showErrorSnackBar(e.toString());
-            debugError(e, s);
-          });
+      context.showLoadingDialog(
+        message: StringRes.loadingLogin,
+        future: _userService.login(username, password, role),
+        onGetError: (e, s) => context.showErrorSnackBar(e.toString()),
+        onGetResult: (data) => context.startStudentListPage()
+      );
     } else {
       context.showErrorSnackBar(StringRes.errSomeInputInvalid);
     }
@@ -158,9 +158,8 @@ class _LoginPageState extends State<LoginPage> {
           child: Button(
               label: StringRes.login,
               marginTop: DimenRes.size_16,
-              onPressed: () {
-                _login();
-              }),
+              onPressed: () => _login()
+          ),
         )
       ],
     );
@@ -170,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
       children: [
         _createContent([]),
-        const LoadingDialog(message: StringRes.loadingContents)
+        const LoadingBlocker(message: StringRes.loadingContents)
       ],
     );
   }

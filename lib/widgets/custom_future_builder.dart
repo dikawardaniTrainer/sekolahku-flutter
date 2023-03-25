@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/constant/student_const.dart';
 import 'package:sekolah_ku/util/logger.dart';
 
 typedef OnShowDataWidget<T> = Widget Function(T data);
@@ -20,13 +21,18 @@ class CustomFutureBuilder<T> extends StatelessWidget {
     this.onErrorFuture
   });
 
+  Future<T> getFuture() async {
+    if(useDummyLoading) await Future.delayed(const Duration(seconds: 2));
+    return await future.catchError((e, s) {
+      debugError(e, s);
+      onErrorFuture?.call(e, s);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
-        future: future.catchError((e, s) {
-          debugError(e, s);
-          onErrorFuture?.call(e, s);
-        }),
+        future: getFuture(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
