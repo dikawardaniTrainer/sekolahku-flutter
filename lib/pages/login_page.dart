@@ -30,8 +30,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordCtrl = TextEditingController();
   final DropDownController<Role?> _roleCtrl = DropDownController(null);
 
+  List<Role> roles = [];
   var obscureText = true;
   var iconData = IconRes.eye;
+  bool get isContentLoaded => roles.isNotEmpty;
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -149,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget _createContent(List<Role> roles) {
+  Widget _createContent() {
     return Column(
       children: [
         Expanded(child: _createForm(roles)),
@@ -168,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _createContentWithLoading() {
     return Stack(
       children: [
-        _createContent([]),
+        _createContent(),
         const LoadingBlocker(message: StringRes.loadingContents)
       ],
     );
@@ -186,12 +188,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomFutureBuilder<List<Role>>(
+      body: isContentLoaded ? _createContent() : CustomFutureBuilder<List<Role>>(
         future: _userService.getRoles(),
-        noDataWidget: _createContent([]),
+        noDataWidget: _createContent(),
         loadingWidget: _createContentWithLoading(),
         onShowDataWidget: (data) {
-          return _createContent(data);
+          roles = data;
+          return _createContent();
         },
       ),
     );
