@@ -6,6 +6,7 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/font_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
+import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -33,15 +34,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _userService.isLoggedIn(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final isLoggedIn = snapshot.data;
+    return SimpleFutureBuilder<bool>(
+        future: _userService.isLoggedIn(),
+        onShowDataWidget: (isLoggedIn) {
           FlutterNativeSplash.remove();
           return _startApp(context, isLoggedIn);
-        }
-        return Container();
-      });
+        },
+        noDataWidget: _startApp(context, null)
+    );
   }
 }

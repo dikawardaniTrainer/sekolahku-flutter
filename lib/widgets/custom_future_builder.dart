@@ -5,6 +5,40 @@ import 'package:sekolah_ku/util/logger.dart';
 typedef OnShowDataWidget<T> = Widget Function(T data);
 typedef OnErrorFuture = Function(Object error, Object stackTrace);
 
+class SimpleFutureBuilder<T> extends StatelessWidget {
+  final Future<T> future;
+  final OnShowDataWidget<T> onShowDataWidget;
+  final Widget noDataWidget;
+
+  const SimpleFutureBuilder({
+    super.key,
+    required this.future,
+    required this.onShowDataWidget,
+    required this.noDataWidget
+  });
+
+  Future<T> getFuture() async {
+    if(useDummyLoading) await Future.delayed(const Duration(seconds: 2));
+    return await future.catchError((e, s) {
+      debugError(e, s);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<T>(
+        future: getFuture(),
+        builder: (context, snapshot) {
+          final data = snapshot.data;
+          if (data != null) {
+            return onShowDataWidget.call(data);
+          }
+          return noDataWidget;
+        }
+    );
+  }
+}
+
 class CustomFutureBuilder<T> extends StatelessWidget {
   final Future<T> future;
   final OnShowDataWidget<T> onShowDataWidget;
