@@ -77,12 +77,7 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
     return Stack(
       children: [
         _createDetail(null),
-        const LoadingDialog(
-          message: StringRes.loadingDetailStudent,
-          messageColor: ColorRes.white,
-          backgroundColor: ColorRes.black,
-          backgroundOpacity: 0.8,
-        )
+        const LoadingDialog(message: StringRes.loadingDetailStudent)
       ],
     );
   }

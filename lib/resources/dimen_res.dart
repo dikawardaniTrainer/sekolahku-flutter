@@ -15,4 +15,5 @@ class DimenRes {
   static const size_100 = 100.0;
   static const size_150 = 150.0;
   static const size_250 = 250.0;
+  static const size_400 = 300.0;
 }

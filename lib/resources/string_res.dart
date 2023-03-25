@@ -34,6 +34,7 @@ class StringRes {
 
   static const loadingStudents = "Loading students data";
   static const loadingDetailStudent = "Loading detail student";
+  static const loadingContents = "Loading contents";
 
   static const errEmailEmpty = "Email cannot be empty";
   static const errEmailInvalid = "Invalid email address";

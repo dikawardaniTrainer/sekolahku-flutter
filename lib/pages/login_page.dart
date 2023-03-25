@@ -170,10 +170,7 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
       children: [
         _createContent([]),
-        const LoadingDialog(
-          backgroundColor: ColorRes.black,
-          backgroundOpacity: 0.3,
-        )
+        const LoadingDialog(message: StringRes.loadingContents)
       ],
     );
   }
