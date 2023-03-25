@@ -13,8 +13,15 @@ class User {
 
   @override
   String toString() {
-    return "username : $username, password: $password";
+    return { "username" : username, "password": password, "role": role }.toString();
   }
+
+  @override
+  bool operator == (dynamic other) =>
+      other != null && other is User && other.toString() == toString();
+
+  @override
+  int get hashCode => Object.hash(username, password, role);
 }
 
 class Role {
@@ -28,12 +35,12 @@ class Role {
 
   @override
   String toString() {
-    return "id: $id, role: $name";
+    return {"id": id, "name": name}.toString();
   }
 
   @override
   bool operator == (dynamic other) =>
-      other != null && other is Role && id == other.id && name == other.name;
+      other != null && other is Role && other.toString() == toString();
 
   @override
   int get hashCode => Object.hash(id, name);

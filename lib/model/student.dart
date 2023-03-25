@@ -26,15 +26,15 @@ class Student {
   String toString() {
     return {
       "Id": id,
-      "First name": firstname,
-      "Last name": lastname,
-      "Phone number": phoneNumber,
-      "Email": email,
-      "Birthdate": birthDate.format(),
-      "Education": education,
-      "Gender": gender,
-      "Hobbies": hobbies.join(", "),
-      "Address": address
+      "first_name": firstname,
+      "last_name": lastname,
+      "phone_number": phoneNumber,
+      "email": email,
+      "birthdate": birthDate.format(),
+      "education": education,
+      "gender": gender,
+      "hobbies": hobbies.join(", "),
+      "address": address
     }.toString();
   }
 
@@ -43,5 +43,5 @@ class Student {
       other != null && other is Student && other.toString() == toString();
 
   @override
-  int get hashCode => Object.hash(id, email);
+  int get hashCode => Object.hash(id, firstname, lastname, phoneNumber, email, education, gender, address, gmapsLink, birthDate, hobbies);
 }
