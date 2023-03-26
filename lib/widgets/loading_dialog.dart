@@ -49,7 +49,7 @@ class LoadingBlocker extends StatelessWidget {
     return Stack(
       children: [
         const Opacity(
-          opacity: 0.5,
+          opacity: 0.4,
           child: ModalBarrier(dismissible: false, color: ColorRes.black),
         ),
         Center(
