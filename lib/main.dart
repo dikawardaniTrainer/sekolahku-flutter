@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           FlutterNativeSplash.remove();
           return _startApp(context, isLoggedIn);
         },
-        noDataWidget: _startApp(context, null)
+        noDataWidget: Container()
     );
   }
 }
