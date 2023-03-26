@@ -8,7 +8,6 @@ import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
-import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
@@ -72,10 +71,27 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
     );
   }
 
+  Widget _createPage(Student? student) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(StringRes.detailStudent),
+        leading: const IconBackButton(),
+      ),
+      body: _createDetail(student),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(
+          IconRes.edit,
+          color: ColorRes.white,
+        ),
+        onPressed: () { _startEditStudent(); },
+      )
+    );
+  }
+
   Widget _createLoading() {
     return Stack(
       children: [
-        _createDetail(null),
+        _createPage(null),
         const LoadingBlocker(message: StringRes.loadingDetailStudent)
       ],
     );
@@ -83,24 +99,12 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(StringRes.detailStudent),
-        leading: const IconBackButton(),
-      ),
-      body: CustomFutureBuilder<Student?>(
+    return Material(
+      child: CustomFutureBuilder(
           future: _studentService.findById(widget.id),
-          loadingWidget: _createLoading(),
-          noDataWidget: _createDetail(null),
-          onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.messageErrorStudentIdNotFound(widget.id)),
-          onShowDataWidget: (data) => _createDetail(data),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(
-          IconRes.edit,
-          color: ColorRes.white,
-        ),
-        onPressed: () { _startEditStudent(); },
+          onShowDataWidget: (data) => _createPage(data),
+          noDataWidget: _createPage(null),
+          loadingWidget: _createLoading()
       ),
     );
   }
