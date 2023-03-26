@@ -82,6 +82,7 @@ class LoadingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(DimenRes.size_16))),
       child: SizedBox(
         width: DimenRes.size_400,
         height: DimenRes.size_150,
