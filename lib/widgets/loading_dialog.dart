@@ -49,7 +49,7 @@ class LoadingBlocker extends StatelessWidget {
     return Stack(
       children: [
         const Opacity(
-          opacity: 0.3,
+          opacity: 0.5,
           child: ModalBarrier(dismissible: false, color: ColorRes.black),
         ),
         Center(
@@ -58,9 +58,17 @@ class LoadingBlocker extends StatelessWidget {
             height: DimenRes.size_150,
             child: Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: ColorRes.white,
-                borderRadius: BorderRadius.all(Radius.circular(DimenRes.size_16))
+                borderRadius: const BorderRadius.all(Radius.circular(DimenRes.size_16)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 10,
+                    blurRadius: 14,
+                    offset: const Offset(0, 10), // changes position of shadow
+                  )
+                ]
               ),
               child: Loading(message: message),
             ),
