@@ -6,13 +6,15 @@ class Button extends StatelessWidget {
   final VoidCallback onPressed;
   final double marginTop;
   final bool isExpanded;
+  final bool enabled;
 
   const Button({
     super.key,
     required this.label,
     required this.onPressed,
     this.marginTop = DimenRes.size_0,
-    this.isExpanded = true
+    this.isExpanded = true,
+    this.enabled = true
   });
 
   @override
@@ -26,7 +28,7 @@ class Button extends StatelessWidget {
               minimumSize: buttonSize,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(DimenRes.size_16))),
-          onPressed: onPressed,
+          onPressed: enabled ? onPressed : null,
           child: Text(
             label,
             style: const TextStyle(fontSize: DimenRes.size_16, fontWeight: FontWeight.bold),

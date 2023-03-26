@@ -78,4 +78,29 @@ extension DialogExt on BuildContext {
       onGetError.call(e, s);
     }
   }
+
+  Future<DateTime?> showDatePickerDialog({
+    required DateTime initial,
+    required DateTime limitFirstDate,
+    required DateTime limitLastDate
+  }) async => await showDatePicker(
+      context: this,
+      initialDate: initial,
+      firstDate: limitFirstDate,
+      lastDate: limitLastDate
+  );
+
+  Future<DateTime?> showDatePickerDialogWithInitial(DateTime initial) async =>
+      await showDatePickerDialog(
+        initial: initial,
+        limitFirstDate: DateTime(1945),
+        limitLastDate: DateTime.now()
+      );
+}
+
+extension FormExt on GlobalKey<FormState> {
+  bool get isAllInputValid {
+    final isValid = currentState?.validate();
+    return isValid != null && isValid;
+  }
 }

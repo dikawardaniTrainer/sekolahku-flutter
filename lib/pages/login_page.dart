@@ -30,10 +30,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordCtrl = TextEditingController();
   final DropDownController<Role?> _roleCtrl = DropDownController(null);
 
-  List<Role> roles = [];
-  var obscureText = true;
-  var iconData = IconRes.eye;
-  bool get isContentLoaded => roles.isNotEmpty;
+  List<Role> _roles = [];
+  var _obscureText = true;
+  var _iconData = IconRes.eye;
+  bool get _isContentLoaded => _roles.isNotEmpty;
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -88,11 +88,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _updatePasswordVisibility() {
     setState(() {
-      obscureText = !obscureText;
-      if (obscureText) {
-        iconData = IconRes.eye;
+      _obscureText = !_obscureText;
+      if (_obscureText) {
+        _iconData = IconRes.eye;
       } else {
-        iconData = IconRes.eyeSlash;
+        _iconData = IconRes.eyeSlash;
       }
     });
   }
@@ -128,9 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                           return _validatePassword(input);
                         },
                         textInputType: TextInputType.text,
-                        obscureText: obscureText,
+                        obscureText: _obscureText,
                         suffixIcon: IconButton(
-                            icon: Icon(iconData),
+                            icon: Icon(_iconData),
                             color: ColorRes.teal,
                             onPressed: () { _updatePasswordVisibility(); }
                         ),
@@ -151,28 +151,23 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  Widget _createContent() {
-    return Column(
-      children: [
-        Expanded(child: _createForm(roles)),
-        Padding(
-          padding: const EdgeInsets.all(DimenRes.size_16),
-          child: Button(
+  Widget _createPage(List<Role> roles) {
+    _roles = roles;
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(child: _createForm(roles)),
+          Padding(
+            padding: const EdgeInsets.all(DimenRes.size_16),
+            child: Button(
               label: StringRes.login,
               marginTop: DimenRes.size_16,
-              onPressed: () => _login()
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget _createContentWithLoading() {
-    return Stack(
-      children: [
-        _createContent(),
-        const LoadingBlocker(message: StringRes.loadingContents)
-      ],
+              onPressed: () => _login(),
+              enabled: _isContentLoaded,
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -187,16 +182,16 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isContentLoaded ? _createContent() : CustomFutureBuilder<List<Role>>(
-        future: _userService.getRoles(),
-        noDataWidget: _createContent(),
-        loadingWidget: _createContentWithLoading(),
-        onShowDataWidget: (data) {
-          roles = data;
-          return _createContent();
-        },
-      ),
+    if (_isContentLoaded) return _createPage(_roles);
+    return CustomFutureBuilder<List<Role>>(
+      future: _userService.getRoles(),
+      onShowDataWidget: (data) => _createPage(data),
+      noDataWidget: _createPage([]),
+      onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.errFetchRoles),
+      loadingWidget: LoadingBlocker(
+        message: StringRes.loadingContents,
+        toBlock: _createPage([]),
+      )
     );
   }
 }

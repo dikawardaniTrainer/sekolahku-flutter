@@ -1,6 +1,7 @@
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/pref/user_pref.dart';
 import 'package:sekolah_ku/repository/user_repository.dart';
+import 'package:sekolah_ku/services/exception/exception.dart';
 import 'package:sekolah_ku/util/logger.dart';
 
 class UserService {
@@ -53,6 +54,7 @@ class UserService {
   Future<List<Role>> getRoles() async {
     final roles = await _userRepository.getRoles();
     debugAction("Get roles", "Found roles : $roles");
-    return roles;
+    if (roles.isNotEmpty) return roles;
+    throw NotFoundException("No data roles has been found");
   }
 }

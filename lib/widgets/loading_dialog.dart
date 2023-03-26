@@ -38,43 +38,53 @@ class Loading extends StatelessWidget {
 
 class LoadingBlocker extends StatelessWidget {
   final String message;
+  final Widget? toBlock;
 
   const LoadingBlocker({
     super.key,
-    this.message = StringRes.emptyString
+    this.message = StringRes.emptyString,
+    this.toBlock
   });
+
+  Widget get _background => const Opacity(
+    opacity: 0.4,
+    child: ModalBarrier(dismissible: false, color: ColorRes.black),
+  );
+
+  Widget get _blockerDialog => Center(
+    child: SizedBox(
+      width: DimenRes.size_400,
+      height: DimenRes.size_150,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: ColorRes.white,
+            borderRadius: const BorderRadius.all(Radius.circular(DimenRes.size_16)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 10,
+                blurRadius: 14,
+                offset: const Offset(0, 10), // changes position of shadow
+              )
+            ]
+        ),
+        child: Loading(message: message),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Opacity(
-          opacity: 0.4,
-          child: ModalBarrier(dismissible: false, color: ColorRes.black),
-        ),
-        Center(
-          child: SizedBox(
-            width: DimenRes.size_400,
-            height: DimenRes.size_150,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: ColorRes.white,
-                borderRadius: const BorderRadius.all(Radius.circular(DimenRes.size_16)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 10,
-                    blurRadius: 14,
-                    offset: const Offset(0, 10), // changes position of shadow
-                  )
-                ]
-              ),
-              child: Loading(message: message),
-            ),
-          ),
-        ),
-      ],
+    final content = toBlock;
+    return Material(
+      child: Stack(
+        children: [
+          if (content != null) content,
+          _background,
+          _blockerDialog
+        ],
+      ),
     );
   }
 }

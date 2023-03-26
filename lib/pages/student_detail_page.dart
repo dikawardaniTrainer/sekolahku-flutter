@@ -88,24 +88,16 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
     );
   }
 
-  Widget _createLoading() {
-    return Stack(
-      children: [
-        _createPage(null),
-        const LoadingBlocker(message: StringRes.loadingDetailStudent)
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: CustomFutureBuilder(
-          future: _studentService.findById(widget.id),
-          onShowDataWidget: (data) => _createPage(data),
-          noDataWidget: _createPage(null),
-          loadingWidget: _createLoading()
-      ),
+    return CustomFutureBuilder(
+        future: _studentService.findById(widget.id),
+        onShowDataWidget: (data) => _createPage(data),
+        noDataWidget: _createPage(null),
+        loadingWidget: LoadingBlocker(
+          message: StringRes.loadingDetailStudent,
+          toBlock: _createPage(null),
+        )
     );
   }
 }

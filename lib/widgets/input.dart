@@ -13,6 +13,7 @@ class InputField extends StatelessWidget {
   final bool obscureText;
   final bool readOnly;
   final bool enabled;
+  final ValueChanged<String>? onChanged;
 
   const InputField({
     super.key,
@@ -26,7 +27,8 @@ class InputField extends StatelessWidget {
     this.prefixIcon,
     this.obscureText = false,
     this.readOnly = false,
-    this.enabled = true
+    this.enabled = true,
+    this.onChanged
   });
 
   @override
@@ -43,6 +45,7 @@ class InputField extends StatelessWidget {
           obscureText: obscureText,
           readOnly: readOnly,
           enabled: enabled,
+          onChanged: onChanged,
           decoration: InputDecoration(
             label: Text(label),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16)),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/model/student.dart';
-import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
@@ -11,6 +10,7 @@ import 'package:sekolah_ku/util/common_extension.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/constant/validation_const.dart';
+import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/checkbox_group.dart';
@@ -50,6 +50,12 @@ class _StudentFormPageState extends State<StudentFormPage> {
   List<String> selectedHobbies = [];
 
   bool get _isEditMode => widget.studentIdToEdit != -1;
+  var _isOldDataLoaded = false;
+  var _isButtonAlreadyHitOnce = false;
+
+  bool get _isButtonEnabled {
+    return _formKey.isAllInputValid || !_isButtonAlreadyHitOnce;
+  }
 
   String get _pageTitle {
     if (_isEditMode) return StringRes.editDataStudent;
@@ -147,7 +153,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
 
   String? _validateEducation(String? input) {
     if (input != null) {
-      if (input == educationOptions.first) {
+      if (_selectedEducation.value == educationOptions.first) {
         return StringRes.errEducationEmpty;
       }
     }
@@ -210,8 +216,8 @@ class _StudentFormPageState extends State<StudentFormPage> {
   }
 
   void _save() {
-    final isValid = _formKey.currentState?.validate();
-    if (isValid != null && isValid) {
+    _isButtonAlreadyHitOnce = true;
+    if (_formKey.isAllInputValid) {
       if (_isEditMode) {
         _updateData(widget.studentIdToEdit);
       } else {
@@ -219,6 +225,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
       }
     } else {
       context.showErrorSnackBar(StringRes.errSomeInputInvalid);
+      _toggleButton();
     }
   }
 
@@ -231,12 +238,11 @@ class _StudentFormPageState extends State<StudentFormPage> {
         initialDate = date;
       }
     }
-    
-    showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(1989),
-      lastDate: DateTime(2024)
+
+    context.showDatePickerDialog(
+        initial: initialDate,
+        limitFirstDate: DateTime(1989),
+        limitLastDate: DateTime(2024)
     ).then((value) {
       if (value != null) {
         _birthDateCtrl.value = TextEditingValue(text: value.format());
@@ -255,6 +261,12 @@ class _StudentFormPageState extends State<StudentFormPage> {
     _genderCtrl.text = oldStudent.gender;
     _selectedEducation.value = oldStudent.education;
     selectedHobbies = oldStudent.hobbies;
+    _isOldDataLoaded = true;
+    _isButtonAlreadyHitOnce = true;
+  }
+
+  void _toggleButton() {
+    if (_isButtonAlreadyHitOnce) refresh();
   }
 
   Widget _createForm() {
@@ -272,45 +284,46 @@ class _StudentFormPageState extends State<StudentFormPage> {
                     label: StringRes.firstName,
                     textInputType: TextInputType.text,
                     controller: _firstNameCtrl,
-                    validator: (s) {
-                      return _validateName(s, StringRes.firstName);
-                    },
+                    validator: (s) => _validateName(s, StringRes.firstName),
+                    onChanged: (v) => _toggleButton(),
                   )),
                   const SizedBox(width: 8,),
                   Expanded(child: InputField(
                     label: StringRes.lastName,
                     textInputType: TextInputType.text,
                     controller: _lastNameCtrl,
-                    validator: (s) {
-                      return _validateName(s, StringRes.lastName);
-                    },
+                    validator: (s) => _validateName(s, StringRes.lastName),
+                    onChanged: (v) => _toggleButton(),
                   ))
                 ],
               ),
               InputField(
                 label: StringRes.phoneNumber,
                 textInputType: TextInputType.phone,
-                validator: (s) { return _validatePhoneNumber(s); },
+                validator: (s) => _validatePhoneNumber(s),
                 controller: _phoneNumberCtrl,
                 marginTop: gap,
+                onChanged: (v) => _toggleButton()
               ),
               InputField(
                 label: StringRes.email,
                 textInputType: TextInputType.emailAddress,
-                validator: (s) { return _validateEmail(s); },
+                validator: (s) => _validateEmail(s),
                 controller: _emailCtrl,
                 marginTop: gap,
+                onChanged: (v) => _toggleButton(),
               ),
               InputField(
                 label: StringRes.birthDate,
                 controller: _birthDateCtrl,
                 readOnly: true,
                 textInputType: TextInputType.none,
-                validator: (s) { return _validateBirthDate(s); },
+                validator: (s) => _validateBirthDate(s),
                 marginTop: gap,
+                onChanged: (v) => _toggleButton(),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.date_range , color: Theme.of(context).primaryColor),
-                  onPressed: () { _showDatePickerDialog(); },
+                  onPressed: () => _showDatePickerDialog(),
                 ),
               ),
               DropDown<String>(
@@ -319,14 +332,20 @@ class _StudentFormPageState extends State<StudentFormPage> {
                 options: educationOptions,
                 onDrawItem: (item) => Text(item),
                 marginTop: gap,
-                onChanged: (s) { _selectedEducation.value = s; },
-                validator: (s) { return _validateEducation(s); },
+                validator: (s) => _validateEducation(s),
+                onChanged: (s) {
+                  _selectedEducation.value = s;
+                  _toggleButton();
+                }
               ),
               RadioGroup(
                 label: StringRes.gender,
                 controller: _genderCtrl,
                 options: genderOptions,
-                onChanged: (s) { _genderCtrl.text = s; },
+                onChanged: (s) {
+                  _genderCtrl.text = s;
+                  _toggleButton();
+                },
                 marginTop: gap,
               ),
               CheckBoxGroup(
@@ -336,6 +355,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
                 options: hobiesOptions,
                 onChanged: (selectedOptions) {
                   selectedHobbies = selectedOptions;
+                  _toggleButton();
                 },
               ),
               InputField(
@@ -343,8 +363,9 @@ class _StudentFormPageState extends State<StudentFormPage> {
                 maxLine: 3,
                 controller: _addressCtrl,
                 textInputType: TextInputType.multiline,
-                validator: (s) { return _validateAddress(s); },
+                validator: (s) => _validateAddress(s),
                 marginTop: gap,
+                onChanged: (s) => _toggleButton(),
               )
             ],
           ),
@@ -353,7 +374,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
     );
   }
 
-  Widget _createPage(Widget body) {
+  Widget _createPage() {
     return Scaffold(
         appBar: AppBar(
           title: Text(_pageTitle),
@@ -365,63 +386,40 @@ class _StudentFormPageState extends State<StudentFormPage> {
             )
           ],
         ),
-        body: body
-    );
-  }
-
-  Widget _createPageContent() {
-    return Column(
-      children: [
-        Expanded(child: _createForm()),
-        Padding(
-          padding: const EdgeInsets.all(DimenRes.size_16),
-          child: Button(
-            label: _buttonTitle,
-            onPressed: () { _save(); },
-          ),
+        body: Column(
+          children: [
+            Expanded(child: _createForm()),
+            Padding(
+              padding: const EdgeInsets.all(DimenRes.size_16),
+              child: Button(
+                enabled: _isButtonEnabled,
+                label: _buttonTitle,
+                onPressed: () { _save(); },
+              ),
+            )
+          ],
         )
-      ],
     );
-  }
-
-  Widget _createPageContentWithLoading() {
-    return Stack(
-      children: [
-        _createPageContent(),
-        const LoadingBlocker(message: StringRes.loadingDetailStudent)
-      ],
-    );
-  }
-
-  Widget _createPageContentNoData() {
-    return Stack(
-      children: [
-        _createPageContent(),
-        const Opacity(
-          opacity: 0.3,
-          child: ModalBarrier(dismissible: false, color: ColorRes.black),
-        ),
-      ],
-    );
-  }
-
-  Widget _createPageContentWithData(Student student) {
-    _setOldStudentData(student);
-    return _createPageContent();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isEditMode) {
+    if (_isEditMode && !_isOldDataLoaded) {
       final id = widget.studentIdToEdit;
-      return _createPage(CustomFutureBuilder(
+      return CustomFutureBuilder(
         future: _studentService.findById(id),
-        onShowDataWidget: (data) => _createPageContentWithData(data),
-        noDataWidget: _createPageContentNoData(),
-        loadingWidget: _createPageContentWithLoading(),
-        onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.messageErrorStudentIdNotFound(id))
-      ));
+        onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.messageErrorStudentIdNotFound(id)),
+        noDataWidget: _createPage(),
+        onShowDataWidget: (data) {
+          _setOldStudentData(data);
+          return _createPage();
+        },
+        loadingWidget: LoadingBlocker(
+          message: StringRes.loadingDetailStudent,
+          toBlock: _createPage(),
+        )
+      );
     }
-    return _createPage(_createPageContent());
+    return _createPage();
   }
 }
