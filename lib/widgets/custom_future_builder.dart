@@ -18,7 +18,7 @@ class SimpleFutureBuilder<T> extends StatelessWidget {
   });
 
   Future<T> getFuture() async {
-    if(useDummyLoading) await Future.delayed(const Duration(seconds: 2));
+    if(useDummyLoading) await Future.delayed(const Duration(seconds: 1));
     return await future.catchError((e, s) {
       debugError(e, s);
     });
@@ -56,7 +56,7 @@ class CustomFutureBuilder<T> extends StatelessWidget {
   });
 
   Future<T> getFuture() async {
-    if(useDummyLoading) await Future.delayed(const Duration(seconds: 2));
+    if(useDummyLoading) await Future.delayed(const Duration(seconds: 1));
     return await future.catchError((e, s) {
       debugError(e, s);
       onErrorFuture?.call(e, s);

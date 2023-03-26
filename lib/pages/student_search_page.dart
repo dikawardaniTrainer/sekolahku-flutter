@@ -41,8 +41,29 @@ class _StudentSearchPageState extends State<StudentSearchPage> {
     );
   }
 
-  Widget _createPage(List<Student> studens) {
-    _students = studens;
+  Widget _showStudents(List<Student> students) {
+    _students = students;
+    return StudentList(
+      students: _students,
+      onRefresh: () => refresh(),
+      onActionSelected: (action, selected) {
+        switch(action) {
+          case StudentListAction.showDetail:
+            context.startDetailStudentPage(selected).then((value) => refresh());
+            break;
+          case StudentListAction.edit:
+            context.startStudentFormPage(selected).then((value) => refresh());
+            break;
+          case StudentListAction.delete:
+            _showConfirmationDelete(selected);
+            break;
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: SearchBar(
@@ -52,35 +73,11 @@ class _StudentSearchPageState extends State<StudentSearchPage> {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: StudentList(
-          students: _students,
-          onRefresh: () => refresh(),
-          onActionSelected: (action, selected) {
-            switch(action) {
-              case StudentListAction.showDetail:
-                context.startDetailStudentPage(selected);
-                break;
-              case StudentListAction.edit:
-                context.startStudentFormPage(selected);
-                break;
-              case StudentListAction.delete:
-                _showConfirmationDelete(selected);
-                break;
-            }
-          },
-        )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomFutureBuilder<List<Student>>(
-        future: _studentService.findByName(_searchCtrl.text),
-        noDataWidget: _createPage([]),
-        onShowDataWidget: (data) => _createPage(data),
-        loadingWidget: LoadingBlocker(
-          message: StringRes.loadingStudents,
-          toBlock: _createPage([]),
+        body: CustomFutureBuilder<List<Student>>(
+            future: _studentService.findByName(_searchCtrl.text),
+            noDataWidget: _showStudents([]),
+            onShowDataWidget: (data) => _showStudents(data),
+            loadingWidget: const LoadingBlocker(message: StringRes.loadingStudents)
         )
     );
   }

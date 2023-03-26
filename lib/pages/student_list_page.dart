@@ -8,6 +8,7 @@ import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
+import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/student_list.dart';
 
 class StudentListPage extends StatefulWidget {
@@ -28,8 +29,7 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void _delete(Student selected) {
-    _studentService.delete(selected)
-        .then((value) => setState(() {
+    _studentService.delete(selected).then((value) => setState(() {
       _students.remove(selected);
       context.showSuccessSnackBar(StringRes.successDeleteStudent);
     })).catchError((e) => context.showErrorSnackBar(e.toString()));
@@ -71,10 +71,10 @@ class _StudentListPageState extends State<StudentListPage> {
         onActionSelected: (action, selected) {
           switch(action) {
             case StudentListAction.showDetail:
-              context.startDetailStudentPage(selected);
+              context.startDetailStudentPage(selected).then((value) => refresh());
               break;
             case StudentListAction.edit:
-              context.startStudentFormPage(selected);
+              context.startStudentFormPage(selected).then((value) => refresh());
               break;
             case StudentListAction.delete:
               _showConfirmationDelete(selected);
@@ -101,7 +101,10 @@ class _StudentListPageState extends State<StudentListPage> {
       future: _studentService.findAll(),
       noDataWidget: _createPage([]),
       onShowDataWidget: (data) => _createPage(data),
-      loadingWidget: Container()
+      loadingWidget: LoadingBlocker(
+        message: StringRes.loadingStudents,
+        toBlock: _createPage([]),
+      )
     );
   }
 }
