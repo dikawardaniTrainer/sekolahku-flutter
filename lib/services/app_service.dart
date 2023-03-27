@@ -12,6 +12,6 @@ class AppService {
   static final StudentRepository _studentRepository = StudentDbRepository(_openHelper);
   static final UserPref _userPref = UserPrefImpl();
 
-  static StudentService get studentService => StudentServiceImpl(_studentRepository);
-  static UserService get userService => UserService(_userRepository, _userPref);
+  static final StudentService studentService = StudentServiceImpl(_studentRepository);
+  static final UserService userService = UserServiceImpl(_userRepository, _userPref);
 }
