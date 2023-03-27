@@ -17,13 +17,13 @@ typedef OnActionSelected = Function(StudentListAction action, Student selected);
 class StudentList extends StatelessWidget {
   final List<Student> students;
   final OnActionSelected onActionSelected;
-  final VoidCallback onRefresh;
+  final Widget onEmpty;
 
   const StudentList({
     super.key,
     required this.students,
     required this.onActionSelected,
-    required this.onRefresh
+    this.onEmpty = const ContainerNoData(message: StringRes.errNoDataStudents)
   });
 
   void _executeSelectedAction(String action, Student selected) {
@@ -39,7 +39,7 @@ class StudentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (students.isEmpty) {
-      return ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: onRefresh);
+      return onEmpty;
     }
     return ListView.separated(
       padding: const EdgeInsets.only(top: DimenRes.size_16),

@@ -6,7 +6,6 @@ import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
-import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/search_bar.dart';
 import 'package:sekolah_ku/widgets/student_list.dart';
 
@@ -45,7 +44,6 @@ class _StudentSearchPageState extends State<StudentSearchPage> {
     _students = students;
     return StudentList(
       students: _students,
-      onRefresh: () => refresh(),
       onActionSelected: (action, selected) {
         switch(action) {
           case StudentListAction.showDetail:
@@ -77,7 +75,7 @@ class _StudentSearchPageState extends State<StudentSearchPage> {
             future: _studentService.findByName(_searchCtrl.text),
             noDataWidget: _showStudents([]),
             onShowDataWidget: (data) => _showStudents(data),
-            loadingWidget: const LoadingBlocker(message: StringRes.loadingStudents)
+            loadingWidget: _showStudents([])
         )
     );
   }

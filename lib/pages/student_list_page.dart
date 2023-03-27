@@ -7,6 +7,7 @@ import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
+import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/student_list.dart';
@@ -67,7 +68,7 @@ class _StudentListPageState extends State<StudentListPage> {
       ),
       body: StudentList(
         students: _students,
-        onRefresh: () => refresh(),
+        onEmpty: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => refresh()),
         onActionSelected: (action, selected) {
           switch(action) {
             case StudentListAction.showDetail:
