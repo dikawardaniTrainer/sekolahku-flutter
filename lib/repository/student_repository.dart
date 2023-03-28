@@ -10,6 +10,7 @@ abstract class StudentRepository {
   Future<List<Map<String, Object?>>> findByName(String name);
   Future<void> update(Map<String, Object?> newData, int id);
   Future<int> countByEmail(String email);
+  Future<int> countTotal();
 }
 
 class StudentDbRepository implements StudentRepository {
@@ -20,9 +21,19 @@ class StudentDbRepository implements StudentRepository {
   @override
   Future<int> countByEmail(String email) async {
     final db = await _openHelper.getDatabase();
-    const queary = 'SELECT COUNT (*) FROM ${StudentTable.tableName} WHERE ${StudentTable.emailField}=?';
-    var x = await db.rawQuery(queary, [email]);
-    int? count = Sqflite.firstIntValue(x);
+    const query = 'SELECT COUNT (*) FROM ${StudentTable.tableName} WHERE ${StudentTable.emailField}=?';
+    var result = await db.rawQuery(query, [email]);
+    int? count = Sqflite.firstIntValue(result);
+    if (count != null) return count;
+    return 0;
+  }
+
+  @override
+  Future<int> countTotal() async {
+    final db = await _openHelper.getDatabase();
+    const query = 'SELECT COUNT (*) FROM ${StudentTable.tableName}';
+    var result = await db.rawQuery(query, []);
+    int? count = Sqflite.firstIntValue(result);
     if (count != null) return count;
     return 0;
   }

@@ -5,6 +5,7 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
+import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/container_no_data.dart';
@@ -53,6 +54,56 @@ class _StudentListPageState extends State<StudentListPage> {
     );
   }
 
+  void _showErrorLoadStudents() => context.showErrorSnackBar(StringRes.errNoDataStudents);
+
+  void _detectItemChanged(Student oldStudent) {
+    _studentService.findAll().then((value) {
+      final latest = value.firstWhere((element) => element.id == oldStudent.id);
+      if (latest != oldStudent) {
+        setState(() {
+          final pos = _students.indexOf(oldStudent);
+          _students[pos] = latest;
+        });
+      }
+    }).catchError((e, s) { _showErrorLoadStudents(); });
+  }
+
+  void _detectListChanged() {
+    _studentService.getTotalData().then((value) {
+      final isDifferent = value != _students.length;
+      debug("Total on db $value, current : ${_students.length}, is different ? $isDifferent");
+      if (isDifferent) {
+        _refresh();
+      }
+    }).catchError((e, s) { _showErrorLoadStudents(); });
+  }
+
+  void _refresh() {
+    setState(() {
+      _students.clear();
+    });
+  }
+
+  Widget _createBody() {
+    return StudentList(
+      students: _students,
+      onEmpty: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => _refresh()),
+      onActionSelected: (action, selected) {
+        switch(action) {
+          case StudentListAction.showDetail:
+            context.startDetailStudentPage(selected).then((value) => _detectItemChanged(selected));
+            break;
+          case StudentListAction.edit:
+            context.startStudentFormPage(selected).then((value) => _detectItemChanged(selected));
+            break;
+          case StudentListAction.delete:
+            _showConfirmationDelete(selected);
+            break;
+        }
+      },
+    );
+  }
+
   Widget _createPage(List<Student> students) {
     _students = students;
     return Scaffold(
@@ -66,23 +117,7 @@ class _StudentListPageState extends State<StudentListPage> {
           IconButton(onPressed: () { _showConfirmationLogout(); }, icon: const Icon(IconRes.logout))
         ],
       ),
-      body: StudentList(
-        students: _students,
-        onEmpty: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => refresh()),
-        onActionSelected: (action, selected) {
-          switch(action) {
-            case StudentListAction.showDetail:
-              context.startDetailStudentPage(selected).then((value) => refresh());
-              break;
-            case StudentListAction.edit:
-              context.startStudentFormPage(selected).then((value) => refresh());
-              break;
-            case StudentListAction.delete:
-              _showConfirmationDelete(selected);
-              break;
-          }
-        },
-      ),
+      body: _createBody(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           IconRes.add,
@@ -90,7 +125,7 @@ class _StudentListPageState extends State<StudentListPage> {
         ),
         onPressed: () {
           context.startStudentFormPage()
-              .then((value) => refresh());
+              .then((value) => _detectListChanged());
         },
       ),
     );
@@ -98,8 +133,10 @@ class _StudentListPageState extends State<StudentListPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_students.isNotEmpty) return _createPage(_students);
     return CustomFutureBuilder<List<Student>>(
       future: _studentService.findAll(),
+      onErrorFuture: (e, s) => _showErrorLoadStudents(),
       noDataWidget: _createPage([]),
       onShowDataWidget: (data) => _createPage(data),
       loadingWidget: LoadingBlocker(

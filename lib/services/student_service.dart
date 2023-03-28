@@ -11,6 +11,7 @@ abstract class StudentService {
   Future<void> delete(Student student);
   Future<List<Student>> findByName(String name);
   Future<void> update(Student student);
+  Future<int> getTotalData();
 }
 
 class StudentServiceImpl implements StudentService {
@@ -85,5 +86,12 @@ class StudentServiceImpl implements StudentService {
       return;
     }
     throw NotFoundException("Student with id ${student.id} no longer exist");
+  }
+
+  @override
+  Future<int> getTotalData() async {
+    final totalData = await _studentRepository.countTotal();
+    debugAction("Get total data", "Total data : $totalData");
+    return totalData;
   }
 }
