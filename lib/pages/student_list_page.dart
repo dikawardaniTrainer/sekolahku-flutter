@@ -84,6 +84,13 @@ class _StudentListPageState extends State<StudentListPage> {
     });
   }
 
+  Future<void> _refreshData() async {
+    final founds = await _studentService.findAll();
+    setState(() {
+      _students = founds;
+    });
+  }
+
   Widget _createBody() {
     return StudentList(
       students: _students,
@@ -117,7 +124,10 @@ class _StudentListPageState extends State<StudentListPage> {
           IconButton(onPressed: () { _showConfirmationLogout(); }, icon: const Icon(IconRes.logout))
         ],
       ),
-      body: _createBody(),
+      body: RefreshIndicator(
+        child: _createBody(),
+        onRefresh: () => _refreshData(),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           IconRes.add,
