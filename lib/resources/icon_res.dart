@@ -26,4 +26,5 @@ class IconRes {
   static const female = Icons.female;
   static const ellipsisVertical = FontAwesomeIcons.ellipsisVertical;
   static const home = Icons.home;
+  static const info = Icons.info_outline;
 }

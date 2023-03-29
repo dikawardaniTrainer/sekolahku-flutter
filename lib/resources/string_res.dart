@@ -33,6 +33,7 @@ class StringRes {
   static const update = "Update";
   static const role = "Role";
   static const retry = "Retry";
+  static const info = "info";
 
   static const loadingStudents = "Loading students data";
   static const loadingDetailStudent = "Loading detail student";
