@@ -30,11 +30,18 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
   final _studentService = AppService.studentService;
   Student? currentStudent;
 
+  void _detectDetailChanged() async {
+    final found = await _studentService.findById(widget.id);
+    if (found != currentStudent) {
+      refresh();
+    }
+  }
+
   void _startEditStudent() {
     final toEdit = currentStudent;
     if (toEdit != null) {
       context.startStudentFormPage(toEdit)
-          .then((value) => refresh());
+          .then((value) => _detectDetailChanged());
     }
   }
 
