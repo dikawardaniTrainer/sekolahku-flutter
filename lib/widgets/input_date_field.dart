@@ -101,6 +101,7 @@ class _InputDateFieldState extends State<InputDateField> {
       label: widget.label,
       controller: widget.controller,
       readOnly: true,
+      maxLine: 1,
       textInputType: TextInputType.none,
       validator: (s) => validateDate(s),
       marginTop: widget.marginTop,

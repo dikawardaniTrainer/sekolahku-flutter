@@ -37,6 +37,7 @@ class InputPhoneNumberField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputField(
       label: StringRes.phoneNumber,
+      maxLine: 1,
       textInputType: TextInputType.phone,
       validator: (s) => _validatePhoneNumber(s),
       controller: controller,

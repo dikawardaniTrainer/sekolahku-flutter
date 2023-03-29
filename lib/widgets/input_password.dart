@@ -63,6 +63,7 @@ class _InputPasswordFieldState extends State<InputPasswordField> {
         return _validatePassword(input);
       },
       textInputType: TextInputType.text,
+      maxLine: 1,
       obscureText: _obscureText,
       suffixIcon: IconButton(
           icon: Icon(_iconData),

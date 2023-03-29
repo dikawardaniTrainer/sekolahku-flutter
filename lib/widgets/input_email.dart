@@ -39,6 +39,7 @@ class InputEmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputField(
       label: label,
+      maxLine: 1,
       textInputType: TextInputType.emailAddress,
       validator: (s) => _validateEmail(s),
       marginTop: marginTop,

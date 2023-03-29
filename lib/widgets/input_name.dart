@@ -54,6 +54,7 @@ class InputNameField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InputField(
       label: label,
+      maxLine: 1,
       marginTop: marginTop,
       textInputType: TextInputType.text,
       controller: controller,
