@@ -9,7 +9,6 @@ import 'package:sekolah_ku/services/exception/exception.dart';
 import 'package:sekolah_ku/util/common_extension.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
-import 'package:sekolah_ku/constant/validation_const.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/widget_extension.dart';
 import 'package:sekolah_ku/widgets/button.dart';
@@ -17,7 +16,11 @@ import 'package:sekolah_ku/widgets/checkbox_group.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
-import 'package:sekolah_ku/widgets/input.dart';
+import 'package:sekolah_ku/widgets/input_date_field.dart';
+import 'package:sekolah_ku/widgets/input_email.dart';
+import 'package:sekolah_ku/widgets/input_name.dart';
+import 'package:sekolah_ku/widgets/input_phone_number.dart';
+import 'package:sekolah_ku/widgets/input_required_field.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/radio_group.dart';
 import 'package:sprintf/sprintf.dart';
@@ -65,90 +68,6 @@ class _StudentFormPageState extends State<StudentFormPage> {
   String get _buttonTitle {
     if (_isEditMode) return StringRes.update;
     return StringRes.save;
-  }
-
-  _isContainSpecialCharacter(String input) {
-    var contained = false;
-    for(int i=0; i<forbiddenCharacters.length; i++) {
-      if (input.contains(forbiddenCharacters[i])) {
-        contained = true;
-        break;
-      }
-    }
-
-    return contained;
-  }
-
-  String? _validateName(String? input, String fieldName) {
-    if (input != null) {
-      if (input.isEmpty) {
-        return sprintf(StringRes.errFieldEmpty, [fieldName]);
-      }
-
-      var regexValid = regexName.hasMatch(input);
-      if (!regexValid | _isContainSpecialCharacter(input)) {
-        return StringRes.errSpecialCharacter;
-      }
-    }
-
-    return null;
-  }
-
-  String? _validateEmail(String? input) {
-    if (input != null) {
-      if (input.isEmpty) {
-        return StringRes.errEmailEmpty;
-      }
-      final bool emailValid = regexEmail.hasMatch(input);
-      if (!emailValid) {
-        return StringRes.errEmailInvalid;
-      }
-    }
-    return null;
-  }
-
-  String? _validatePhoneNumber(String? input) {
-    if (input != null) {
-      if (input.isEmpty) {
-        return StringRes.errPhoneNumberEmpty;
-      }
-      final bool isValid = regexPhoneNumber.hasMatch(input);
-      if (!isValid) {
-        return StringRes.errPhoneNumberInvalid;
-      }
-    }
-    return null;
-  }
-
-  String? _validateAddress(String? input) {
-    if (input != null) {
-      if (input.isEmpty) {
-        return StringRes.errAddressEmpty;
-      }
-    }
-    return null;
-  }
-
-  String? _validateBirthDate(String? input) {
-    if (input != null) {
-      if (input.isEmpty) {
-        return StringRes.errBirthDateEmpty;
-      }
-
-      final dateTime = input.parse();
-      if (dateTime != null) {
-        if (dateTime.isBefore(minimumBirthDate)) {
-          return sprintf(StringRes.errBirthDateBeforeMin, [minimumBirthDate.format()]);
-        }
-        if (dateTime.isAfter(maxBirthDate)) {
-          return sprintf(StringRes.errBirthDateAfterMax, [maxBirthDate.format()]);
-        }
-      } else {
-        return StringRes.errBirthDateInvalid;
-      }
-    }
-
-    return null;
   }
 
   String? _validateEducation(String? input) {
@@ -229,27 +148,6 @@ class _StudentFormPageState extends State<StudentFormPage> {
     }
   }
 
-  void _showDatePickerDialog() {
-    var initialDate = DateTime.now();
-    
-    if (_birthDateCtrl.text.isNotEmpty) {
-      final date = _birthDateCtrl.text.parse();
-      if (date != null) {
-        initialDate = date;
-      }
-    }
-
-    context.showDatePickerDialog(
-        initial: initialDate,
-        limitFirstDate: DateTime(1989),
-        limitLastDate: DateTime(2024)
-    ).then((value) {
-      if (value != null) {
-        _birthDateCtrl.value = TextEditingValue(text: value.format());
-      }
-    });
-  }
-
   void _setOldStudentData(Student oldStudent) {
     _birthDateCtrl.text = oldStudent.birthDate.format();
     _firstNameCtrl.text = oldStudent.firstname;
@@ -280,51 +178,49 @@ class _StudentFormPageState extends State<StudentFormPage> {
             children: [
               Row(
                 children: [
-                  Expanded(child: InputField(
+                  Expanded(child: InputNameField(
                     label: StringRes.firstName,
-                    textInputType: TextInputType.text,
                     controller: _firstNameCtrl,
-                    validator: (s) => _validateName(s, StringRes.firstName),
                     onChanged: (v) => _toggleButton(),
                   )),
                   const SizedBox(width: 8,),
-                  Expanded(child: InputField(
+                  Expanded(child: InputNameField(
                     label: StringRes.lastName,
-                    textInputType: TextInputType.text,
                     controller: _lastNameCtrl,
-                    validator: (s) => _validateName(s, StringRes.lastName),
                     onChanged: (v) => _toggleButton(),
                   ))
                 ],
               ),
-              InputField(
-                label: StringRes.phoneNumber,
-                textInputType: TextInputType.phone,
-                validator: (s) => _validatePhoneNumber(s),
+              InputPhoneNumberField(
                 controller: _phoneNumberCtrl,
                 marginTop: gap,
                 onChanged: (v) => _toggleButton()
               ),
-              InputField(
+              InputEmailField(
                 label: StringRes.email,
-                textInputType: TextInputType.emailAddress,
-                validator: (s) => _validateEmail(s),
                 controller: _emailCtrl,
                 marginTop: gap,
                 onChanged: (v) => _toggleButton(),
               ),
-              InputField(
+              InputDateField(
                 label: StringRes.birthDate,
                 controller: _birthDateCtrl,
-                readOnly: true,
-                textInputType: TextInputType.none,
-                validator: (s) => _validateBirthDate(s),
                 marginTop: gap,
                 onChanged: (v) => _toggleButton(),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.date_range , color: Theme.of(context).primaryColor),
-                  onPressed: () => _showDatePickerDialog(),
+                config: DateConfig(
+                  minDate: minimumBirthDate,
+                  maxDate: maxBirthDate,
+                  minDatePicker: DateTime(1989),
+                  maxDatePicker: DateTime(2024)
                 ),
+                onShowError: (cause) {
+                  switch (cause) {
+                    case ErrorType.required: return StringRes.errBirthDateEmpty;
+                    case ErrorType.minDateReached: return sprintf(StringRes.errBirthDateBeforeMin, [minimumBirthDate.format()]);
+                    case ErrorType.maxDateReached: return sprintf(StringRes.errBirthDateAfterMax, [maxBirthDate.format()]);
+                    case ErrorType.invalid: return StringRes.errBirthDateInvalid;
+                  }
+                },
               ),
               DropDown<String>(
                 label: StringRes.education,
@@ -358,13 +254,13 @@ class _StudentFormPageState extends State<StudentFormPage> {
                   _toggleButton();
                 },
               ),
-              InputField(
+              InputRequiredField(
                 label: StringRes.address,
-                maxLine: 3,
+                marginTop: gap,
+                minLine: 3,
                 controller: _addressCtrl,
                 textInputType: TextInputType.multiline,
-                validator: (s) => _validateAddress(s),
-                marginTop: gap,
+                onGetErrorMessage: () => StringRes.errAddressEmpty,
                 onChanged: (s) => _toggleButton(),
               )
             ],

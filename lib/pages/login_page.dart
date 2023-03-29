@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sekolah_ku/constant/validation_const.dart';
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
@@ -13,7 +12,8 @@ import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
-import 'package:sekolah_ku/widgets/input.dart';
+import 'package:sekolah_ku/widgets/input_email.dart';
+import 'package:sekolah_ku/widgets/input_password.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,35 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   final DropDownController<Role?> _roleCtrl = DropDownController(null);
 
   List<Role> _roles = [];
-  var _obscureText = true;
-  var _iconData = IconRes.eye;
   bool get _isContentLoaded => _roles.isNotEmpty;
-
-  String? _validateEmail(String? email) {
-    if (email != null) {
-      if (email.isEmpty) {
-        return StringRes.errEmailEmpty;
-      }
-      final bool emailValid = regexEmail.hasMatch(email);
-      if (!emailValid) {
-        return StringRes.errEmailInvalid;
-      }
-    }
-
-    return null;
-  }
-
-  String? _validatePassword(String? password) {
-    if (password != null) {
-      if (password.isEmpty) {
-        return StringRes.errPasswordEmpty;
-      }
-      if (password.length < 6) {
-        return StringRes.errPasswordInvalid;
-      }
-    }
-    return null;
-  }
 
   String? _validateRole(Role? role) {
     if (role == null) {
@@ -86,17 +58,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _updatePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText;
-      if (_obscureText) {
-        _iconData = IconRes.eye;
-      } else {
-        _iconData = IconRes.eyeSlash;
-      }
-    });
-  }
-
   Widget _createForm(List<Role> roles) {
     return SingleChildScrollView(
         child: Form(
@@ -111,29 +72,15 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(DimenRes.size_16),
                   child: Column(
                     children: [
-                      InputField(
-                          label: StringRes.username,
-                          controller: _usernameCtrl,
-                          prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
-                          validator: (input) {
-                            return _validateEmail(input);
-                          },
-                          textInputType: TextInputType.emailAddress),
-                      InputField(
-                        label: StringRes.password,
+                      InputEmailField(
+                        label: StringRes.username,
+                        controller: _usernameCtrl,
+                        prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal)
+                      ),
+                      InputPasswordField(
+                        marginTop: DimenRes.size_16,
                         controller: _passwordCtrl,
                         prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
-                        marginTop: DimenRes.size_16,
-                        validator: (input) {
-                          return _validatePassword(input);
-                        },
-                        textInputType: TextInputType.text,
-                        obscureText: _obscureText,
-                        suffixIcon: IconButton(
-                            icon: Icon(_iconData),
-                            color: ColorRes.teal,
-                            onPressed: () { _updatePasswordVisibility(); }
-                        ),
                       ),
                       DropDown<Role?>(
                           options: roles,
