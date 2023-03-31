@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
-import 'package:sekolah_ku/util/widget_extension.dart';
+import 'package:sekolah_ku/util/dialog_extension.dart';
 import 'package:sekolah_ku/widgets/input.dart';
 
 enum ErrorType {

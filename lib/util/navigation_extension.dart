@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
-import 'package:sekolah_ku/util/widget_extension.dart';
+import 'package:sekolah_ku/util/snackbar_extension.dart';
 
 extension NavigationExt on BuildContext {
 

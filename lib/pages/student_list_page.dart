@@ -6,8 +6,9 @@ import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/logger.dart';
+import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
-import 'package:sekolah_ku/util/widget_extension.dart';
+import 'package:sekolah_ku/util/dialog_extension.dart';
 import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
@@ -57,12 +58,11 @@ class _StudentListPageState extends State<StudentListPage> {
   void _showErrorLoadStudents() => context.showErrorSnackBar(StringRes.errNoDataStudents);
 
   void _detectItemChanged(Student oldStudent) {
-    _studentService.findAll().then((value) {
-      final latest = value.firstWhere((element) => element.id == oldStudent.id);
-      if (latest != oldStudent) {
+    _studentService.findById(oldStudent.id).then((value) {
+      if (value != oldStudent) {
         setState(() {
           final pos = _students.indexOf(oldStudent);
-          _students[pos] = latest;
+          _students[pos] = value;
         });
       }
     }).catchError((e, s) { _showErrorLoadStudents(); });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/constant/student_const.dart';
-import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/widgets/confirmation_dialog.dart';
@@ -8,30 +7,6 @@ import 'package:sekolah_ku/widgets/loading_dialog.dart';
 
 typedef OnGetResult<T> = Function(T result);
 typedef OnGetError = Function(Object error, Object stackTrace);
-
-
-extension SnackbarExt on BuildContext {
-
-  void _showSnackBar(String message, Color bgColor, Color textColor){
-    SnackBar snackBar = SnackBar(
-      duration: const Duration(seconds: 3),
-      backgroundColor: bgColor,
-      content: Text(
-          message,
-          style: TextStyle(color: textColor)
-      ),
-    );
-    ScaffoldMessenger.of(this).showSnackBar(snackBar);
-  }
-
-  void showSuccessSnackBar(String message) {
-    _showSnackBar(message, ColorRes.teal, ColorRes.white);
-  }
-
-  void showErrorSnackBar(String message) {
-    _showSnackBar(message, ColorRes.red, ColorRes.white);
-  }
-}
 
 extension DialogExt on BuildContext {
 
@@ -96,11 +71,4 @@ extension DialogExt on BuildContext {
         limitFirstDate: DateTime(1945),
         limitLastDate: DateTime.now()
       );
-}
-
-extension FormExt on GlobalKey<FormState> {
-  bool get isAllInputValid {
-    final isValid = currentState?.validate();
-    return isValid != null && isValid;
-  }
 }
