@@ -27,8 +27,12 @@ class _StudentListPageState extends State<StudentListPage> {
   List<Student> _students = [];
 
   void _logout() {
-    _userService.logout().then((value) => context.startLoginPage())
-        .catchError((e) => context.showErrorSnackBar(e.toString()));
+    context.showLoadingDialog(
+        message: StringRes.loadingLogout,
+        future: _userService.logout(),
+        onGetResult: (value) => context.startLoginPage(),
+        onGetError: (e, s) => context.showErrorSnackBar(e.toString())
+    );
   }
 
   void _delete(Student selected) {

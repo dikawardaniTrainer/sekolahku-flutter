@@ -41,6 +41,7 @@ class StringRes {
   static const loadingLogin = "Please wait while Logging in";
   static const loadingSaveStudent = "Please wait while saving new data student";
   static const loadingUpdateStudent = "Please wait while updating data student";
+  static const loadingLogout = "Please wait while logging out";
 
   static const errEmailEmpty = "Email cannot be empty";
   static const errEmailInvalid = "Invalid email address";
