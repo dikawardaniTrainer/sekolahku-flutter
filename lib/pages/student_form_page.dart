@@ -207,13 +207,11 @@ class _StudentFormPageState extends State<StudentFormPage> {
                 label: StringRes.birthDate,
                 controller: _birthDateCtrl,
                 marginTop: gap,
+                minDate: minimumBirthDate,
+                maxDate: maxBirthDate,
+                minDatePicker: DateTime(1989),
+                maxDatePicker: DateTime(2024),
                 onChanged: (v) => _toggleButton(),
-                config: DateConfig(
-                  minDate: minimumBirthDate,
-                  maxDate: maxBirthDate,
-                  minDatePicker: DateTime(1989),
-                  maxDatePicker: DateTime(2024)
-                ),
                 onShowError: (cause) {
                   switch (cause) {
                     case ErrorType.required: return StringRes.errBirthDateEmpty;
