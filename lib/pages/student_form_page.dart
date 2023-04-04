@@ -50,9 +50,8 @@ class _StudentFormPageState extends State<StudentFormPage> {
   final _emailCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
   final _genderCtrl = TextEditingController();
-  final _selectedEducation = DropDownController<String>(educationOptions[0]);
-  
-  List<String> selectedHobbies = [];
+  final _educationCtrl = DropDownController<String>(educationOptions[0]);
+  final _hobbiesCtrl = CheckBoxController(hobbiesOptions, []);
 
   bool get _isEditMode => widget.studentIdToEdit != -1;
   var _isOldDataLoaded = false;
@@ -74,7 +73,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
 
   String? _validateEducation(String? input) {
     if (input != null) {
-      if (_selectedEducation.value == educationOptions.first) {
+      if (_educationCtrl.value == educationOptions.first) {
         return StringRes.errEducationEmpty;
       }
     }
@@ -88,9 +87,9 @@ class _StudentFormPageState extends State<StudentFormPage> {
       phoneNumber: _phoneNumberCtrl.text,
       email: _emailCtrl.text,
       birthDate: _birthDateCtrl.text.parse(),
-      education: _selectedEducation.value.toStringOrEmpty(),
+      education: _educationCtrl.value.toStringOrEmpty(),
       gender: _genderCtrl.text,
-      hobbies: selectedHobbies,
+      hobbies: _hobbiesCtrl.value,
       address: _addressCtrl.text
     );
   }
@@ -159,8 +158,8 @@ class _StudentFormPageState extends State<StudentFormPage> {
     _addressCtrl.text = oldStudent.address;
 
     _genderCtrl.text = oldStudent.gender;
-    _selectedEducation.value = oldStudent.education;
-    selectedHobbies = oldStudent.hobbies;
+    _educationCtrl.value = oldStudent.education;
+    _hobbiesCtrl.value = oldStudent.hobbies;
     _isOldDataLoaded = true;
     _isButtonAlreadyHitOnce = true;
   }
@@ -226,13 +225,13 @@ class _StudentFormPageState extends State<StudentFormPage> {
               ),
               DropDown<String>(
                 label: StringRes.education,
-                controller: _selectedEducation,
+                controller: _educationCtrl,
                 options: educationOptions,
                 onDrawItem: (item) => Text(item),
                 marginTop: gap,
                 validator: (s) => _validateEducation(s),
                 onChanged: (s) {
-                  _selectedEducation.value = s;
+                  _educationCtrl.value = s;
                   _toggleButton();
                 }
               ),
@@ -249,12 +248,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
               CheckBoxGroup(
                 label: StringRes.hobbies,
                 marginTop: gap,
-                selectedOptions: selectedHobbies,
-                options: hobiesOptions,
-                onChanged: (selectedOptions) {
-                  selectedHobbies = selectedOptions;
-                  _toggleButton();
-                },
+                controller: _hobbiesCtrl,
               ),
               InputRequiredField(
                 label: StringRes.address,
