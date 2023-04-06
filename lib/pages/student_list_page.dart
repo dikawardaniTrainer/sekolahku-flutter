@@ -190,7 +190,7 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     if (_students.isNotEmpty) return _createPage(_students);
     Future<List<Student>> future = _studentService.findAll();
-    if (lastSelectedFilterEducation != null || lastSelectedFilterGender != null) {
+    if (isFilterApplied) {
       future = _studentService.findByGenderOrEducation(lastSelectedFilterGender, lastSelectedFilterEducation);
     }
     return CustomFutureBuilder<List<Student>>(
