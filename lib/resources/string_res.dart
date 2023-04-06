@@ -27,6 +27,8 @@ class StringRes {
   static const edit = "Edit";
   static const delete = "Delete";
   static const male = "Male";
+  static const female = "Female";
+  static const both = "Both";
   static const deleteStudent = "Delete Student";
   static const ok = "Okay";
   static const cancel = "Cancel";
@@ -34,6 +36,17 @@ class StringRes {
   static const role = "Role";
   static const retry = "Retry";
   static const info = "info";
+  static const filter = "Filter";
+  static const apply = "Apply";
+  static const resetFilter = "Reset Filter";
+  static const pleaseSelectEducation = "*** Please select one education ***";
+  static const sd = "SD";
+  static const smp = "SMP";
+  static const sma = "SMA";
+  static const s1 = "S1";
+  static const reading = "Reading";
+  static const writing = "Writing";
+  static const drawing = "drawing";
 
   static const loadingStudents = "Loading students data";
   static const loadingDetailStudent = "Loading detail student";
@@ -67,6 +80,10 @@ class StringRes {
   static const errEmailExisted = "The email that you use is already exist, please use another one";
   static const errFetchRoles = "Unable to fetch roles";
   static const errRoleRequired = "Please select the role first";
+  static const errFilterStudents = "To filter student data, please provide the gender or education or both";
+  static const _errFilterNotFoundsForFull = "No data students has been found with gender %s and education %s";
+  static const _errFilterNotFoundsForGender = "No data students has been found with gender %s";
+  static const _errFilterNotFoundsForEducation = "No data students has been found with education %s";
 
   static const successSaveStudent = "Data student saved successfully";
   static const successUpdateStudent = "Data student updated successfully";
@@ -77,5 +94,12 @@ class StringRes {
 
   static String messageErrorStudentIdNotFound(int id) => sprintf(_errorStudentIdNotFound, [id]);
 
+  static String messageErrorFilterStudents(String? gender, String? education) {
+    if (gender != null && education != null) return sprintf(_errFilterNotFoundsForFull, [gender, education]);
+    if (gender != null) return sprintf(_errFilterNotFoundsForGender, [gender]);
+    return sprintf(_errFilterNotFoundsForEducation, [education]);
+  }
+
   static String messageConfirmDeleteStudent(String fullName) => sprintf(_confirmDeleteStudent, [fullName]);
+
 }

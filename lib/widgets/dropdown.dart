@@ -57,6 +57,7 @@ class _DropDownState<T> extends State<DropDown<T>> {
                 .toList(),
             onChanged: (s) {
               if (s != null) {
+                widget.controller.value = s;
                 widget.onChanged.call(s);
               }
             },

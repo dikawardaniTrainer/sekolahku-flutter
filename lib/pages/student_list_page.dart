@@ -6,11 +6,13 @@ import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/logger.dart';
+import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
 import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
+import 'package:sekolah_ku/widgets/dialog_filter_student.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
 import 'package:sekolah_ku/widgets/student_list.dart';
 
@@ -25,6 +27,8 @@ class _StudentListPageState extends State<StudentListPage> {
   final _studentService = AppService.studentService;
   final _userService = AppService.userService;
   List<Student> _students = [];
+  String? lastSelectedFilterGender, lastSelectedFilterEducation;
+  bool get isFilterApplied => lastSelectedFilterEducation != null || lastSelectedFilterGender != null;
 
   void _logout() {
     context.showLoadingDialog(
@@ -59,7 +63,13 @@ class _StudentListPageState extends State<StudentListPage> {
     );
   }
 
-  void _showErrorLoadStudents() => context.showErrorSnackBar(StringRes.errNoDataStudents);
+  void _showErrorLoadStudents() {
+    if (isFilterApplied) {
+      context.showErrorSnackBar(StringRes.messageErrorFilterStudents(lastSelectedFilterGender, lastSelectedFilterEducation));
+      return;
+    }
+    context.showErrorSnackBar(StringRes.errNoDataStudents);
+  }
 
   void _detectItemChanged(Student oldStudent) {
     _studentService.findById(oldStudent.id).then((value) {
@@ -95,6 +105,34 @@ class _StudentListPageState extends State<StudentListPage> {
     });
   }
 
+  void _filterStudents(String? education, String? gender) {
+    if (education == null && gender == null) {
+      context.showErrorSnackBar(StringRes.errFilterStudents);
+      return;
+    }
+    lastSelectedFilterEducation = education;
+    lastSelectedFilterGender = gender;
+    _refresh();
+  }
+
+  void _showFilterDialog() {
+    final content = DialogFilterStudent(
+      lastSelectedEducation: lastSelectedFilterEducation,
+      lastSelectedGender: lastSelectedFilterGender,
+      onCancel: () => context.goBack(),
+      onReset: () {
+        context.goBack();
+        lastSelectedFilterGender = null;
+        lastSelectedFilterEducation = null;
+        _refresh();
+      },
+      onApply: (edu, gender) {
+        context.goBack();
+        _filterStudents(edu, gender);
+      });
+    context.showBottomSheetDialog(content);
+  }
+
   Widget _createBody() {
     return StudentList(
       students: _students,
@@ -117,6 +155,8 @@ class _StudentListPageState extends State<StudentListPage> {
 
   Widget _createPage(List<Student> students) {
     _students = students;
+    IconData iconFilter = IconRes.filterNotApplied;
+    if (isFilterApplied) iconFilter = IconRes.filterApplied;
     return Scaffold(
       appBar: AppBar(
         title: const Text(StringRes.appName),
@@ -125,6 +165,7 @@ class _StudentListPageState extends State<StudentListPage> {
             context.startStudentSearchPage()
                 .then((value) => refresh());
           }, icon: const Icon(IconRes.search)),
+          IconButton(onPressed: () => _showFilterDialog(), icon: Icon(iconFilter)),
           IconButton(onPressed: () { _showConfirmationLogout(); }, icon: const Icon(IconRes.logout))
         ],
       ),
@@ -148,8 +189,12 @@ class _StudentListPageState extends State<StudentListPage> {
   @override
   Widget build(BuildContext context) {
     if (_students.isNotEmpty) return _createPage(_students);
+    Future<List<Student>> future = _studentService.findAll();
+    if (lastSelectedFilterEducation != null || lastSelectedFilterGender != null) {
+      future = _studentService.findByGenderOrEducation(lastSelectedFilterGender, lastSelectedFilterEducation);
+    }
     return CustomFutureBuilder<List<Student>>(
-      future: _studentService.findAll(),
+      future: future,
       onErrorFuture: (e, s) => _showErrorLoadStudents(),
       noDataWidget: _createPage([]),
       onShowDataWidget: (data) => _createPage(data),

@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:sekolah_ku/resources/string_res.dart';
 
-final genderOptions = ["Male", "Female"];
-final educationOptions = ["*** Please select one education ***", "SD", "SMP", "SMA", "S1"];
-final hobbiesOptions = ["Reading", "Writing", "Drawing"];
+final genderOptions = [StringRes.male, StringRes.female];
+final educationOptions = [StringRes.pleaseSelectEducation, StringRes.sd, StringRes.smp, StringRes.sma, StringRes.s1];
+final hobbiesOptions = [StringRes.reading, StringRes.writing, StringRes.drawing];
 final minimumBirthDate = DateTime(1990);
 final maxBirthDate = DateTime(2016);
-const datePattern = 'EEEEE, dd MMMM yyyy';
-bool get useDummyLoading => kDebugMode && true;

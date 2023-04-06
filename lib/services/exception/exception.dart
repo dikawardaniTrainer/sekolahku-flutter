@@ -6,6 +6,10 @@ abstract class ServiceException implements Exception {
   String toString() => message;
 }
 
+class IllegalArgumentException extends ServiceException {
+  IllegalArgumentException(super.message);
+}
+
 class NotFoundException extends ServiceException {
   NotFoundException(super.message);
 }

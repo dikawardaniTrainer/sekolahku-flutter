@@ -27,4 +27,6 @@ class IconRes {
   static const ellipsisVertical = FontAwesomeIcons.ellipsisVertical;
   static const home = Icons.home;
   static const info = Icons.info_outline;
+  static const filterApplied = Icons.filter_list;
+  static const filterNotApplied = Icons.filter_list_off;
 }

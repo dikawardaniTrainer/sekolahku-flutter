@@ -19,12 +19,13 @@ import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
 import 'package:sekolah_ku/widgets/input_date_field.dart';
+import 'package:sekolah_ku/widgets/input_education.dart';
 import 'package:sekolah_ku/widgets/input_email.dart';
 import 'package:sekolah_ku/widgets/input_name.dart';
 import 'package:sekolah_ku/widgets/input_phone_number.dart';
 import 'package:sekolah_ku/widgets/input_required_field.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
-import 'package:sekolah_ku/widgets/radio_group.dart';
+import 'package:sekolah_ku/widgets/radio_gender.dart';
 import 'package:sprintf/sprintf.dart';
 
 class StudentFormPage extends StatefulWidget {
@@ -69,15 +70,6 @@ class _StudentFormPageState extends State<StudentFormPage> {
   String get _buttonTitle {
     if (_isEditMode) return StringRes.update;
     return StringRes.save;
-  }
-
-  String? _validateEducation(String? input) {
-    if (input != null) {
-      if (_educationCtrl.value == educationOptions.first) {
-        return StringRes.errEducationEmpty;
-      }
-    }
-    return null;
   }
 
   Student _collectInput() {
@@ -221,26 +213,12 @@ class _StudentFormPageState extends State<StudentFormPage> {
                   }
                 },
               ),
-              DropDown<String>(
-                label: StringRes.education,
+              InputEducation(
                 controller: _educationCtrl,
-                options: educationOptions,
-                onDrawItem: (item) => Text(item),
                 marginTop: gap,
-                validator: (s) => _validateEducation(s),
-                onChanged: (s) {
-                  _educationCtrl.value = s;
-                  _toggleButton();
-                }
               ),
-              RadioGroup(
-                label: StringRes.gender,
+              RadioGender(
                 controller: _genderCtrl,
-                options: genderOptions,
-                onChanged: (s) {
-                  _genderCtrl.text = s;
-                  _toggleButton();
-                },
                 marginTop: gap,
               ),
               CheckBoxGroup(

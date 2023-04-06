@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sekolah_ku/constant/student_const.dart';
+import 'package:sekolah_ku/constant/app_const.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/widgets/confirmation_dialog.dart';
@@ -71,4 +71,12 @@ extension DialogExt on BuildContext {
         limitFirstDate: DateTime(1945),
         limitLastDate: DateTime.now()
       );
+
+  Future<T?> showBottomSheetDialog<T>(Widget content, {bool isScrollControlled = true}) {
+    return showModalBottomSheet<T>(
+        context: this,
+        isScrollControlled: isScrollControlled,
+        builder: (context) => Scrollable(viewportBuilder: (context, offset) => content)
+    );
+  }
 }

@@ -11,6 +11,9 @@ abstract class StudentRepository {
   Future<void> update(Map<String, Object?> newData, int id);
   Future<int> countByEmail(String email);
   Future<int> countTotal();
+  Future<List<Map<String, Object?>>> findByGender(String gender);
+  Future<List<Map<String, Object?>>> findByEducation(String education);
+  Future<List<Map<String, Object?>>> findByGenderAndEducation(String gender, String education);
 }
 
 class StudentDbRepository implements StudentRepository {
@@ -104,5 +107,32 @@ class StudentDbRepository implements StudentRepository {
         whereArgs: [id]
     );
     await db.close();
+  }
+
+  @override
+  Future<List<Map<String, Object?>>> findByGender(String gender) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=?";
+    final result = await db.rawQuery(query,[gender]);
+    await db.close();
+    return result;
+  }
+
+  @override
+  Future<List<Map<String, Object?>>> findByEducation(String education) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.educationField}=?";
+    final result = await db.rawQuery(query,[education]);
+    await db.close();
+    return result;
+  }
+
+  @override
+  Future<List<Map<String, Object?>>> findByGenderAndEducation(String gender, String education) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=? AND ${StudentTable.educationField}=?";
+    final result = await db.rawQuery(query,[gender, education]);
+    await db.close();
+    return result;
   }
 }

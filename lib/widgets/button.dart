@@ -7,6 +7,7 @@ class Button extends StatelessWidget {
   final double marginTop;
   final bool isExpanded;
   final bool enabled;
+  final Color? backgroundColor;
 
   const Button({
     super.key,
@@ -14,7 +15,8 @@ class Button extends StatelessWidget {
     required this.onPressed,
     this.marginTop = DimenRes.size_0,
     this.isExpanded = true,
-    this.enabled = true
+    this.enabled = true,
+    this.backgroundColor
   });
 
   @override
@@ -26,6 +28,7 @@ class Button extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
               minimumSize: buttonSize,
+              backgroundColor: backgroundColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(DimenRes.size_16))),
           onPressed: enabled ? onPressed : null,

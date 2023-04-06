@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sekolah_ku/constant/student_const.dart';
+import 'package:sekolah_ku/constant/app_const.dart';
 import 'package:sekolah_ku/util/logger.dart';
 
 typedef OnShowDataWidget<T> = Widget Function(T data);

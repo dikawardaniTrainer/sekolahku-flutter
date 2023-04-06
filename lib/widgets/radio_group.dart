@@ -86,9 +86,9 @@ class _RadioGroupState extends State<RadioGroup> {
   @override
   void initState() {
     super.initState();
-    if (widget.controller.text.isEmpty) {
-      widget.controller.text = widget.options.first;
-    }
+    // if (widget.controller.text.isEmpty) {
+    //   widget.controller.text = widget.options.first;
+    // }
   }
 
   @override
