@@ -62,7 +62,7 @@ class ResultPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(_icon, color: ColorRes.white, size: DimenRes.size_60,),
+                    Icon(_icon, color: ColorRes.white, size: DimenRes.size_100,),
                     const SizedBox(height: DimenRes.size_16,),
                     TitleText(label: _title, color: ColorRes.white,),
                     const SizedBox(height: DimenRes.size_10,),
