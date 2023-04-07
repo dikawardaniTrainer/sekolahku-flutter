@@ -38,7 +38,7 @@ class DialogFilterStudent extends StatelessWidget {
     if (_educationCtrl.value != educationOptions[0]) {
       selectedEducation = _educationCtrl.value;
     }
-    if (_genderCtrl.value.text.isNotEmpty) {
+    if (_genderCtrl.value.text.isNotEmpty && _genderCtrl.value.text != StringRes.both) {
       selectedGender = _genderCtrl.value.text;
     }
     onApply.call(selectedEducation, selectedGender);
