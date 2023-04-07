@@ -5,6 +5,10 @@ class CheckBoxController extends ValueNotifier<List<String>> {
   List<String> options;
 
   CheckBoxController(this.options, super.value);
+
+  void clear() {
+    value = [];
+  }
 }
 
 class CheckBoxGroup extends StatefulWidget {

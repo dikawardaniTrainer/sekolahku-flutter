@@ -43,7 +43,7 @@ class StudentFormPage extends StatefulWidget {
 
 class _StudentFormPageState extends State<StudentFormPage> {
   final _studentService = AppService.studentService;
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   final _birthDateCtrl = TextEditingController();
   final _firstNameCtrl = TextEditingController();
@@ -87,6 +87,22 @@ class _StudentFormPageState extends State<StudentFormPage> {
     );
   }
 
+  void _clearInput() {
+    setState(() {
+      _firstNameCtrl.clear();
+      _lastNameCtrl.clear();
+      _phoneNumberCtrl.clear();
+      _emailCtrl.clear();
+      _birthDateCtrl.clear();
+      _educationCtrl.clear();
+      _genderCtrl.clear();
+      _hobbiesCtrl.clear();
+      _addressCtrl.clear();
+      _isButtonAlreadyHitOnce = false;
+      _formKey = GlobalKey();
+    });
+  }
+
   void _saveNewData() {
     var student = _collectInput();
     context.showLoadingDialog(
@@ -95,6 +111,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
         onGetResult: (data) {
           // context.showSuccessSnackBar(StringRes.successSaveStudent);
           // context.goBack();
+          _clearInput();
           context.startSuccessPage(StringRes.successSaveStudent, showGoBackHome: true);
         },
         onGetError: (e, s) {

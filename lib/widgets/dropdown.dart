@@ -75,7 +75,15 @@ class _DropDownState<T> extends State<DropDown<T>> {
 }
 
 class DropDownController<T> extends ValueNotifier<T> {
-  DropDownController(super.value);
+  late T initValue;
+
+  DropDownController(super.value) {
+    initValue = value;
+  }
+
+  void clear() {
+    value = initValue;
+  }
 }
 
 typedef OnDrawItem<T> = Widget Function(T item);
