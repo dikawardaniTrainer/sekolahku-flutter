@@ -29,4 +29,7 @@ class IconRes {
   static const info = Icons.info_outline;
   static const filterApplied = Icons.filter_list;
   static const filterNotApplied = Icons.filter_list_off;
+  static const close = Icons.close;
+  static const success = Icons.check_circle;
+  static const failed = FontAwesomeIcons.circleExclamation;
 }

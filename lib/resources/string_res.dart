@@ -47,6 +47,10 @@ class StringRes {
   static const reading = "Reading";
   static const writing = "Writing";
   static const drawing = "drawing";
+  static const success = "Success";
+  static const failed = "Failed";
+  static const goBack = "Go Back";
+  static const goBackHome = "Back to Home";
 
   static const loadingStudents = "Loading students data";
   static const loadingDetailStudent = "Loading detail student";

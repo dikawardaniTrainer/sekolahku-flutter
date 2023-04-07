@@ -4,6 +4,7 @@ import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/args.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
 import 'package:sekolah_ku/pages/login_page.dart';
+import 'package:sekolah_ku/pages/result_page.dart';
 import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';
 import 'package:sekolah_ku/pages/student_list_page.dart';
@@ -27,6 +28,12 @@ extension AppNavigation on BuildContext {
 
   Future<dynamic> startLoginPage() => _goToPage(Routes.login, isRootPage: true);
 
+  Future<dynamic> _startResultPage(String message, ResultType type, {bool showGoBackHome = false}) => _goToPage(Routes.result, data: ResultData(message, type, showGoBackHome: showGoBackHome));
+
+  Future<dynamic> startSuccessPage(String message,  {bool showGoBackHome = false}) => _startResultPage(message, ResultType.success, showGoBackHome: showGoBackHome);
+
+  Future<dynamic> startErrorPage(String message,  {bool showGoBackHome = false}) => _startResultPage(message, ResultType.failed, showGoBackHome: showGoBackHome);
+
   Widget? _getPage(String? routeName, Object? args) {
     debug("Get page for route $routeName");
     switch(routeName) {
@@ -49,6 +56,15 @@ extension AppNavigation on BuildContext {
           }
         }
         return const StudentFormPage();
+      case Routes.result:
+        if (args is Args) {
+          final data = args.data;
+          if (data is ResultData) {
+            return ResultPage(type: data.type, message: data.message, showGoBackHome: data.showGoBackHome,);
+          }
+          return null;
+        }
+        return null;
       default: return null;
     }
   }

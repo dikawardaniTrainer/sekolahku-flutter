@@ -11,7 +11,7 @@ class ColorRes {
   static const transparent = Colors.transparent;
   static const blue = Colors.blue;
   static final blueDark = HexColor("#0d02ad");
-  static final red = HexColor("#ad0202");
+  static final red = HexColor("#c44b43");
   static const pink = Colors.pinkAccent;
   static const green = Colors.green;
 }

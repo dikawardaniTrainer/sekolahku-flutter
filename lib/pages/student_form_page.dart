@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/model/student.dart';
+import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
@@ -92,15 +93,17 @@ class _StudentFormPageState extends State<StudentFormPage> {
         message: StringRes.loadingSaveStudent,
         future: _studentService.save(student),
         onGetResult: (data) {
-          context.showSuccessSnackBar(StringRes.successSaveStudent);
-          context.goBack();
+          // context.showSuccessSnackBar(StringRes.successSaveStudent);
+          // context.goBack();
+          context.startSuccessPage(StringRes.successSaveStudent, showGoBackHome: true);
         },
         onGetError: (e, s) {
           var errorMessage = StringRes.errSaveNewStudent;
           if (e is DuplicateEmailException) {
             errorMessage = StringRes.errEmailExisted;
           }
-          context.showErrorSnackBar(errorMessage);
+          // context.showErrorSnackBar(errorMessage);
+          context.startErrorPage(errorMessage);
         }
     );
   }
@@ -112,8 +115,9 @@ class _StudentFormPageState extends State<StudentFormPage> {
         message: StringRes.loadingUpdateStudent,
         future: _studentService.update(student),
         onGetResult: (data) {
-          context.showSuccessSnackBar(StringRes.successUpdateStudent);
-          context.goBack();
+          // context.showSuccessSnackBar(StringRes.successUpdateStudent);
+          // context.goBack();
+          context.startSuccessPage(StringRes.successUpdateStudent, showGoBackHome: true);
         },
         onGetError: (e, s) {
           String message;
@@ -122,7 +126,8 @@ class _StudentFormPageState extends State<StudentFormPage> {
           } else {
             message = StringRes.errUpdateStudent;
           }
-          context.showErrorSnackBar(message);
+          // context.showErrorSnackBar(message);
+          context.startErrorPage(message);
         }
     );
   }

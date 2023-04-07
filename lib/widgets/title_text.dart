@@ -23,7 +23,7 @@ class TitleText extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: DimenRes.size_30, color: color),
+              fontWeight: FontWeight.bold, fontSize: DimenRes.size_22, color: color),
         )
       ],
     );
