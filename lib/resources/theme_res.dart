@@ -5,9 +5,9 @@ import 'package:sekolah_ku/resources/font_res.dart';
 
 class ThemeRes {
   static const themeMode = ThemeMode.system;
-  static const iconTheme = IconThemeData(color: ColorRes.tealMat);
-  static const appBarTheme = AppBarTheme(color: ColorRes.tealMat);
-  static InputDecorationTheme inputDecor = InputDecorationTheme(
+  static const _iconTheme = IconThemeData(color: ColorRes.tealMat);
+  static const _appBarTheme = AppBarTheme(color: ColorRes.tealMat);
+  static final _inputDecor = InputDecorationTheme(
     suffixIconColor: ColorRes.tealMat,
     prefixIconColor: ColorRes.tealMat,
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16))
@@ -19,9 +19,9 @@ class ThemeRes {
       brightness: _brightness(darkMode),
       primarySwatch: ColorRes.tealMat,
       fontFamily: FontRes.poppins,
-      appBarTheme: appBarTheme,
-      iconTheme: iconTheme,
-      inputDecorationTheme: inputDecor,
+      appBarTheme: _appBarTheme,
+      iconTheme: _iconTheme,
+      inputDecorationTheme: _inputDecor,
       dividerColor: ColorRes.tealMat,
       colorScheme: ColorScheme.fromSwatch(brightness: _brightness(darkMode), primarySwatch: ColorRes.tealMat).copyWith(secondary: ColorRes.tealMat)
   );
