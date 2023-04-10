@@ -75,6 +75,10 @@ class _StudentListPageState extends State<StudentListPage> {
   void _detectItemChanged(Student oldStudent) {
     _studentService.findById(oldStudent.id).then((value) {
       if (value != oldStudent) {
+        if (_isFilterApplied) {
+          _filterStudents(lastSelectedFilterEducation, lastSelectedFilterGender);
+          return;
+        }
         setState(() {
           final pos = _students.indexOf(oldStudent);
           _students[pos] = value;
@@ -104,6 +108,10 @@ class _StudentListPageState extends State<StudentListPage> {
       if (filterList.isNotEmpty) {
         final student = filterList.first;
         if (studentOnView != student) {
+          if (_isFilterApplied) {
+            _filterStudents(lastSelectedFilterEducation, lastSelectedFilterGender);
+            return;
+          }
           setState(() {
             final pos = _students.indexOf(studentOnView);
             _students[pos] = student;
@@ -120,6 +128,10 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   Future<void> _refreshData() async {
+    if (_isFilterApplied) {
+      _filterStudents(lastSelectedFilterEducation, lastSelectedFilterGender);
+      return;
+    }
     final founds = await _studentService.findAll();
     setState(() {
       _students = founds;
