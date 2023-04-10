@@ -14,4 +14,6 @@ class ColorRes {
   static final red = HexColor("#c44b43");
   static const pink = Colors.pinkAccent;
   static const green = Colors.green;
+  static Color teal800 = Colors.teal.shade800;
+
 }

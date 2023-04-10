@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class DimenRes {
   static const size_0 = 0.0;
   static const size_1 = 1.0;
@@ -17,4 +19,8 @@ class DimenRes {
   static const size_150 = 150.0;
   static const size_250 = 250.0;
   static const size_400 = 300.0;
+
+  static double getStatusBarHeight(BuildContext context) {
+    return MediaQuery.of(context).viewPadding.top;
+  }
 }

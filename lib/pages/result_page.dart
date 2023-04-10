@@ -32,7 +32,7 @@ class ResultPage extends StatelessWidget {
 
   Color get _backgroundColor {
     switch(type) {
-      case ResultType.success: return ColorRes.green;
+      case ResultType.success: return ColorRes.teal800;
       case ResultType.failed: return ColorRes.red;
     }
   }
@@ -52,8 +52,8 @@ class ResultPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: DimenRes.size_30,),
-            IconButton(onPressed: () => context.goBack(), icon: const Icon(IconRes.close, color: ColorRes.white,)),
+            SizedBox(height: DimenRes.getStatusBarHeight(context)),
+            IconButton(onPressed: () => context.goBack(), icon: const Icon(IconRes.close, color: ColorRes.white, size: DimenRes.size_30,)),
             Expanded(child: Padding(
               padding: const EdgeInsets.all(DimenRes.size_60),
               child: SizedBox(
