@@ -125,17 +125,17 @@ class StudentServiceImpl implements StudentService {
     Future<int>? future;
     if (gender != null && gender.isNotEmpty && education != null && education.isNotEmpty) {
       future = _studentRepository.countByGenderAndEducation(gender, education);
-      debugAction("countByGenderOrEducation", "Using repo findByGenderAndEducation");
+      debugAction("countByGenderOrEducation", "Using repo countByGenderAndEducation");
     } else if ( gender != null && gender.isNotEmpty) {
       future = _studentRepository.countByGender(gender);
-      debugAction("countByGenderOrEducation", "Using repo findByGender");
+      debugAction("countByGenderOrEducation", "Using repo countByGender");
     } else if (education != null && education.isNotEmpty) {
       future = _studentRepository.countByEducation(education);
-      debugAction("countByGenderOrEducation", "Using repo findByEducation");
+      debugAction("countByGenderOrEducation", "Using repo countByEducation");
     }
     if (future != null) {
       final total = await future;
-      debugAction("countByGenderOrEducation", "Find data for gender: $gender and education: $education\nTotal data founds: $total");
+      debugAction("countByGenderOrEducation", "Count data for gender: $gender and education: $education\nTotal data founds: $total");
       return total;
     }
     throw IllegalArgumentException("Must be provide gender or education");
