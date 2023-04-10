@@ -9,7 +9,6 @@ import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
-import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
 import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/container_no_data.dart';
@@ -96,6 +95,22 @@ class _StudentListPageState extends State<StudentListPage> {
         _refresh();
       }
     }).catchError((e, s) { _showErrorLoadStudents(); });
+  }
+
+  void _detectContentChanged() async {
+    final studentsOnDb = await _studentService.findAll();
+    for (var studentOnView in _students) {
+      final filterList = studentsOnDb.where((element) => element.id == studentOnView.id);
+      if (filterList.isNotEmpty) {
+        final student = filterList.first;
+        if (studentOnView != student) {
+          setState(() {
+            final pos = _students.indexOf(studentOnView);
+            _students[pos] = student;
+          });
+        }
+      }
+    }
   }
 
   void _refresh() {
@@ -190,7 +205,7 @@ class _StudentListPageState extends State<StudentListPage> {
         actions: [
           IconButton(onPressed: () {
             context.startStudentSearchPage()
-                .then((value) => refresh());
+                .then((value) => _detectContentChanged());
           }, icon: const Icon(IconRes.search)),
           IconButton(onPressed: () => _showFilterDialog(), icon: Icon(iconFilter)),
           IconButton(onPressed: () { _showConfirmationLogout(); }, icon: const Icon(IconRes.logout))
