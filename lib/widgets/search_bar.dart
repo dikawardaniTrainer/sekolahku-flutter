@@ -25,29 +25,32 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(DimenRes.size_16)),
-        child: TextField(
-          style: const TextStyle(color: ColorRes.black),
-          onSubmitted: widget.onValueChanged,
-          onChanged: widget.onValueChanged,
-          controller: widget.controller,
-          decoration: InputDecoration(
-              prefixIcon: const IconBackButton(iconColor: ColorRes.teal),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear, color: ColorRes.teal),
-                onPressed: () {
-                  widget.controller.text = StringRes.emptyString;
-                  widget.onClearTapped.call();
-                },
-              ),
-              hintText: 'Search...',
-              border: InputBorder.none
-          ),
-        )
+    return Padding(
+      padding: const EdgeInsets.only(bottom: DimenRes.size_8),
+      child: Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(DimenRes.size_16)),
+          child: TextField(
+            style: const TextStyle(color: ColorRes.black),
+            onSubmitted: widget.onValueChanged,
+            onChanged: widget.onValueChanged,
+            controller: widget.controller,
+            decoration: InputDecoration(
+                prefixIcon: const IconBackButton(iconColor: ColorRes.teal),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear, color: ColorRes.teal),
+                  onPressed: () {
+                    widget.controller.text = StringRes.emptyString;
+                    widget.onClearTapped.call();
+                  },
+                ),
+                hintText: 'Search...',
+                border: InputBorder.none
+            ),
+          )
+      ),
     );
   }
 }
