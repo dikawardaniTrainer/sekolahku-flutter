@@ -12,21 +12,17 @@ class ThemeRes {
     prefixIconColor: ColorRes.tealMat,
     border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16))
   );
-  static darkTheme(BuildContext context) => ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: ColorRes.tealMat,
-    fontFamily: FontRes.poppins,
-    appBarTheme: appBarTheme,
-    iconTheme: iconTheme,
-    inputDecorationTheme: inputDecor,
-    dividerColor: ColorRes.tealMat,
-    colorScheme: ColorScheme.fromSwatch(brightness: Brightness.dark, primarySwatch: ColorRes.tealMat).copyWith(secondary: ColorRes.tealMat)
-  );
-  static final lightTheme = ThemeData(
-    primarySwatch: ColorRes.tealMat,
-    fontFamily: FontRes.poppins,
-    iconTheme: iconTheme,
-    inputDecorationTheme: inputDecor,
-    dividerColor: ColorRes.tealMat,
+
+  static Brightness _brightness(bool darkMode) => darkMode ? Brightness.dark : Brightness.light;
+
+  static ThemeData getTheme(bool darkMode) => ThemeData(
+      brightness: _brightness(darkMode),
+      primarySwatch: ColorRes.tealMat,
+      fontFamily: FontRes.poppins,
+      appBarTheme: appBarTheme,
+      iconTheme: iconTheme,
+      inputDecorationTheme: inputDecor,
+      dividerColor: ColorRes.tealMat,
+      colorScheme: ColorScheme.fromSwatch(brightness: _brightness(darkMode), primarySwatch: ColorRes.tealMat).copyWith(secondary: ColorRes.tealMat)
   );
 }
