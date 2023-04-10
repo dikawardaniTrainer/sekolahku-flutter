@@ -54,10 +54,11 @@ class DialogFilterStudent extends StatelessWidget {
         children: [
           const TitleText(label: StringRes.filter, color: Colors.teal,),
           const SizedBox(height: DimenRes.size_8,),
-          const Divider(height: DimenRes.size_1, color: ColorRes.teal,),
+          const Divider(height: DimenRes.size_1),
           InputEducation(
             controller: _educationCtrl,
             marginTop: DimenRes.size_20,
+            enableValidator: false,
           ),
           RadioGenderFilter(
             controller: _genderCtrl,

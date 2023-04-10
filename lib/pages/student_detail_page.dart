@@ -11,7 +11,7 @@ import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/icon_back_button.dart';
-import 'package:sekolah_ku/widgets/item_detail_student.dart';
+import 'package:sekolah_ku/widgets/item_detail.dart';
 import 'package:sekolah_ku/widgets/loading_dialog.dart';
 
 class StudentDetailPage extends StatefulWidget {
@@ -64,10 +64,10 @@ class _StudentDetailPageState extends State<StudentDetailPage> {
               shrinkWrap: true,
               padding: const EdgeInsets.only(top: DimenRes.size_10, bottom: DimenRes.size_10),
               itemCount: items.length,
-              separatorBuilder: (context, i) => const Divider(color: ColorRes.grey, height: DimenRes.size_1),
+              separatorBuilder: (context, i) => const Divider(height: DimenRes.size_1),
               itemBuilder: (context, i) {
                 final itemDetail = items[i];
-                return ItemDetailStudent(
+                return ItemDetailView(
                   itemDetail: itemDetail,
                   onGMapLinkTapped: (link) => context.openLink(link),
                 );

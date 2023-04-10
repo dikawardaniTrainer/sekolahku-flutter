@@ -31,6 +31,7 @@ class _SearchBarState extends State<SearchBar> {
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(DimenRes.size_16)),
         child: TextField(
+          style: const TextStyle(color: ColorRes.black),
           onSubmitted: widget.onValueChanged,
           onChanged: widget.onValueChanged,
           controller: widget.controller,

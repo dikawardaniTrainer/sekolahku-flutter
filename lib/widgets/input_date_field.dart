@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
@@ -94,7 +95,7 @@ class InputDateField extends StatelessWidget {
       prefixIcon: prefixIcon,
       onTap: () => _showDatePickerDialog(context),
       suffixIcon: IconButton(
-        icon: Icon(Icons.date_range , color: Theme.of(context).primaryColor),
+        icon: const Icon(Icons.date_range, color: ColorRes.teal,),
         onPressed: () => _showDatePickerDialog(context),
       ),
     );

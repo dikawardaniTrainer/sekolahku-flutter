@@ -51,27 +51,28 @@ class LoadingBlocker extends StatelessWidget {
     child: ModalBarrier(dismissible: false, color: ColorRes.black),
   );
 
-  Widget get _blockerDialog => Center(
-    child: SizedBox(
-      width: DimenRes.size_400,
-      height: DimenRes.size_150,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: ColorRes.white,
-            borderRadius: const BorderRadius.all(Radius.circular(DimenRes.size_16)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 10,
-                blurRadius: 14,
-                offset: const Offset(0, 10), // changes position of shadow
-              )
-            ]
+  Widget get _blockerDialog => Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.all(DimenRes.size_60),
+          child: Container(
+            constraints: const BoxConstraints(
+              minWidth: DimenRes.size_400,
+              minHeight: DimenRes.size_150
+            ),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(DimenRes.size_16)
+              ),
+              child: Loading(message: message),
+            ),
+          ),
         ),
-        child: Loading(message: message),
-      ),
-    ),
+      )
+    ],
   );
 
   @override

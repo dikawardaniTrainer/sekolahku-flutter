@@ -56,7 +56,6 @@ class InputField extends StatelessWidget {
           minLines: minLine,
           decoration: InputDecoration(
             label: Text(label),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16)),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon
           ),

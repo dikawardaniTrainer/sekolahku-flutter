@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
-import 'package:sekolah_ku/resources/color_res.dart';
-import 'package:sekolah_ku/resources/font_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
+import 'package:sekolah_ku/resources/theme_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 
@@ -25,10 +24,9 @@ class MyApp extends StatelessWidget {
       title: StringRes.appName,
       onGenerateRoute: context.getRouteGenerator(),
       initialRoute: initialRoute,
-      theme: ThemeData(
-          primarySwatch: ColorRes.tealMat,
-          fontFamily: FontRes.poppins
-      ),
+      themeMode: ThemeRes.themeMode,
+      darkTheme: ThemeRes.darkTheme(context),
+      theme: ThemeRes.lightTheme,
     );
   }
 

@@ -25,7 +25,7 @@ class TitlePopMenuItem extends StatelessWidget {
             ]
         ),
         const SizedBox(height: DimenRes.size_10),
-        const Divider(height: DimenRes.size_1, color: Colors.teal)
+        const Divider(height: DimenRes.size_1)
       ],
     );
   }

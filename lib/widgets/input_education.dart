@@ -7,15 +7,18 @@ class InputEducation extends StatelessWidget {
   final double marginTop;
   final DropDownController<String> controller;
   final ValueChanged<String>? onChanged;
+  final bool enableValidator;
 
   const InputEducation({
     super.key,
     required this.controller,
     this.marginTop = 0,
-    this.onChanged
+    this.onChanged,
+    this.enableValidator = true
   });
 
   String? _validateEducation(String? input) {
+    if (!enableValidator) return null;
     if (input != null) {
       if (controller.value == educationOptions.first) {
         return StringRes.errEducationEmpty;

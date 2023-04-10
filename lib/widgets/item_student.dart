@@ -10,12 +10,12 @@ import 'package:sekolah_ku/widgets/pop_up_menu.dart';
 
 typedef OnActionSelected = void Function(String action, Student student);
 
-class ItemSynopsisStudent extends StatelessWidget {
+class ItemStudent extends StatelessWidget {
   final Student student;
   final GestureTapCallback? onTap;
   final OnActionSelected? onActionSelected;
 
-  const ItemSynopsisStudent({
+  const ItemStudent({
     super.key,
     required this.student,
     this.onTap,
@@ -36,7 +36,7 @@ class ItemSynopsisStudent extends StatelessWidget {
       padding: const EdgeInsets.all(DimenRes.size_10),
       child: Row(
         children: [
-          const Icon(IconRes.accountCircleOutline, size: DimenRes.size_60, color: ColorRes.teal),
+          const Icon(IconRes.accountCircleOutline, size: DimenRes.size_60),
           const SizedBox(width: DimenRes.size_8),
           Expanded(child: Column(
             children: [

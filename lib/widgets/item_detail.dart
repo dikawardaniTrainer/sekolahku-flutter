@@ -32,11 +32,11 @@ class ItemDetail {
   }
 }
 
-class ItemDetailStudent extends StatelessWidget {
+class ItemDetailView extends StatelessWidget {
   final ItemDetail itemDetail;
   final OnOpenLink? onGMapLinkTapped;
   
-  const ItemDetailStudent({
+  const ItemDetailView({
     super.key,
     required this.itemDetail,
     this.onGMapLinkTapped
@@ -57,7 +57,6 @@ class ItemDetailStudent extends StatelessWidget {
       valueStyles = const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: DimenRes.size_18,
-          color: ColorRes.black
       );
     }
 
@@ -66,7 +65,7 @@ class ItemDetailStudent extends StatelessWidget {
       padding: const EdgeInsets.all(DimenRes.size_10),
       child: Row(
         children: [
-          Icon(itemDetail.iconData, size: DimenRes.size_40, color: ColorRes.teal),
+          Icon(itemDetail.iconData, size: DimenRes.size_40),
           const SizedBox(width: DimenRes.size_20),
           Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
