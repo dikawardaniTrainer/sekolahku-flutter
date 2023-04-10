@@ -153,7 +153,7 @@ class StudentDbRepository implements StudentRepository {
   @override
   Future<int> countByGender(String gender) async {
     final db = await _openHelper.getDatabase();
-    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=?";
+    const query = "SELECT COUNT(*) FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=?";
     final result = await db.rawQuery(query,[gender]);
     int? count = Sqflite.firstIntValue(result);
     await db.close();
@@ -164,7 +164,7 @@ class StudentDbRepository implements StudentRepository {
   @override
   Future<int> countByGenderAndEducation(String gender, String education) async {
     final db = await _openHelper.getDatabase();
-    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=? AND ${StudentTable.educationField}=?";
+    const query = "SELECT COUNT(*) FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=? AND ${StudentTable.educationField}=?";
     final result = await db.rawQuery(query,[gender, education]);
     int? count = Sqflite.firstIntValue(result);
     await db.close();
