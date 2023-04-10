@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
+import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
@@ -10,6 +11,7 @@ import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
+import 'package:sekolah_ku/widgets/button.dart';
 import 'package:sekolah_ku/widgets/container_no_data.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dialog_filter_student.dart';
@@ -28,7 +30,7 @@ class _StudentListPageState extends State<StudentListPage> {
   final _userService = AppService.userService;
   List<Student> _students = [];
   String? lastSelectedFilterGender, lastSelectedFilterEducation;
-  bool get isFilterApplied => lastSelectedFilterEducation != null || lastSelectedFilterGender != null;
+  bool get _isFilterApplied => lastSelectedFilterEducation != null || lastSelectedFilterGender != null;
 
   void _logout() {
     context.showLoadingDialog(
@@ -64,7 +66,7 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void _showErrorLoadStudents() {
-    if (isFilterApplied) {
+    if (_isFilterApplied) {
       context.showErrorSnackBar(StringRes.messageErrorFilterStudents(lastSelectedFilterGender, lastSelectedFilterEducation));
       return;
     }
@@ -83,7 +85,11 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void _detectListChanged() {
-    _studentService.getTotalData().then((value) {
+    Future<int> future = _studentService.getTotalData();
+    if (_isFilterApplied) {
+      future = _studentService.countByGenderOrEducation(lastSelectedFilterGender, lastSelectedFilterEducation);
+    }
+    future.then((value) {
       final isDifferent = value != _students.length;
       debug("Total on db $value, current : ${_students.length}, is different ? $isDifferent");
       if (isDifferent) {
@@ -115,6 +121,12 @@ class _StudentListPageState extends State<StudentListPage> {
     _refresh();
   }
 
+  void _resetFilter() {
+    lastSelectedFilterGender = null;
+    lastSelectedFilterEducation = null;
+    _refresh();
+  }
+
   void _showFilterDialog() {
     final content = DialogFilterStudent(
       lastSelectedEducation: lastSelectedFilterEducation,
@@ -122,9 +134,7 @@ class _StudentListPageState extends State<StudentListPage> {
       onCancel: () => context.goBack(),
       onReset: () {
         context.goBack();
-        lastSelectedFilterGender = null;
-        lastSelectedFilterEducation = null;
-        _refresh();
+        _resetFilter();
       },
       onApply: (edu, gender) {
         context.goBack();
@@ -134,29 +144,46 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   Widget _createBody() {
-    return StudentList(
-      students: _students,
-      onEmpty: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => _refresh()),
-      onActionSelected: (action, selected) {
-        switch(action) {
-          case StudentListAction.showDetail:
-            context.startDetailStudentPage(selected).then((value) => _detectItemChanged(selected));
-            break;
-          case StudentListAction.edit:
-            context.startStudentFormPage(selected).then((value) => _detectItemChanged(selected));
-            break;
-          case StudentListAction.delete:
-            _showConfirmationDelete(selected);
-            break;
-        }
-      },
+    return Column(
+      children: [
+        if (_isFilterApplied) Container(
+          color: ColorRes.green,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.only(left: DimenRes.size_16, right: DimenRes.size_16, top: DimenRes.size_6, bottom: DimenRes.size_6),
+            child: Row(
+              children: [
+                const Expanded(child: Text(StringRes.filterApplied, style: TextStyle(color: Colors.white),)),
+                const SizedBox(width: DimenRes.size_8,),
+                Button(label: StringRes.resetFilter, isExpanded: false, onPressed: () => _resetFilter())
+              ],
+            ),
+          ),
+        ),
+        Expanded(child: StudentList(
+          students: _students,
+          onEmpty: ContainerNoData(message: StringRes.errNoDataStudents, onRefreshClicked: () => _refresh()),
+          onActionSelected: (action, selected) {
+            switch(action) {
+              case StudentListAction.showDetail:
+                context.startDetailStudentPage(selected).then((value) => _detectItemChanged(selected));
+                break;
+              case StudentListAction.edit:
+                context.startStudentFormPage(selected).then((value) => _detectItemChanged(selected));
+                break;
+              case StudentListAction.delete:
+                _showConfirmationDelete(selected);
+                break;
+            }
+          },
+        ))
+      ],
     );
   }
 
   Widget _createPage(List<Student> students) {
     _students = students;
-    IconData iconFilter = IconRes.filterNotApplied;
-    if (isFilterApplied) iconFilter = IconRes.filterApplied;
+    IconData iconFilter = IconRes.filter;
     return Scaffold(
       appBar: AppBar(
         title: const Text(StringRes.appName),
@@ -190,7 +217,7 @@ class _StudentListPageState extends State<StudentListPage> {
   Widget build(BuildContext context) {
     if (_students.isNotEmpty) return _createPage(_students);
     Future<List<Student>> future = _studentService.findAll();
-    if (isFilterApplied) {
+    if (_isFilterApplied) {
       future = _studentService.findByGenderOrEducation(lastSelectedFilterGender, lastSelectedFilterEducation);
     }
     return CustomFutureBuilder<List<Student>>(

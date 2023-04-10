@@ -13,6 +13,7 @@ abstract class StudentService {
   Future<void> update(Student student);
   Future<int> getTotalData();
   Future<List<Student>> findByGenderOrEducation(String? gender, String? education);
+  Future<int> countByGenderOrEducation(String? gender, String? education);
 }
 
 class StudentServiceImpl implements StudentService {
@@ -115,6 +116,27 @@ class StudentServiceImpl implements StudentService {
       if (founds.isEmpty) throw NotFoundException("No data found for gender: $gender and education: $education");
       return founds.map((e) => e.toStudent())
           .toList();
+    }
+    throw IllegalArgumentException("Must be provide gender or education");
+  }
+
+  @override
+  Future<int> countByGenderOrEducation(String? gender, String? education) async {
+    Future<int>? future;
+    if (gender != null && gender.isNotEmpty && education != null && education.isNotEmpty) {
+      future = _studentRepository.countByGenderAndEducation(gender, education);
+      debugAction("countByGenderOrEducation", "Using repo findByGenderAndEducation");
+    } else if ( gender != null && gender.isNotEmpty) {
+      future = _studentRepository.countByGender(gender);
+      debugAction("countByGenderOrEducation", "Using repo findByGender");
+    } else if (education != null && education.isNotEmpty) {
+      future = _studentRepository.countByEducation(education);
+      debugAction("countByGenderOrEducation", "Using repo findByEducation");
+    }
+    if (future != null) {
+      final total = await future;
+      debugAction("countByGenderOrEducation", "Find data for gender: $gender and education: $education\nTotal data founds: $total");
+      return total;
     }
     throw IllegalArgumentException("Must be provide gender or education");
   }

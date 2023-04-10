@@ -51,6 +51,7 @@ class StringRes {
   static const failed = "Failed";
   static const goBack = "Go Back";
   static const goBackHome = "Back to Home";
+  static const filterApplied = "Filter Applied";
 
   static const loadingStudents = "Loading students data";
   static const loadingDetailStudent = "Loading detail student";

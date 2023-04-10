@@ -27,8 +27,7 @@ class IconRes {
   static const ellipsisVertical = FontAwesomeIcons.ellipsisVertical;
   static const home = Icons.home;
   static const info = Icons.info_outline;
-  static const filterApplied = Icons.filter_list_off;
-  static const filterNotApplied = Icons.filter_list;
+  static const filter = Icons.filter_list;
   static const close = Icons.close;
   static const success = Icons.check_circle;
   static const failed = FontAwesomeIcons.circleExclamation;

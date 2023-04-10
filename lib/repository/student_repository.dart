@@ -14,6 +14,9 @@ abstract class StudentRepository {
   Future<List<Map<String, Object?>>> findByGender(String gender);
   Future<List<Map<String, Object?>>> findByEducation(String education);
   Future<List<Map<String, Object?>>> findByGenderAndEducation(String gender, String education);
+  Future<int> countByGender(String gender);
+  Future<int> countByEducation(String education);
+  Future<int> countByGenderAndEducation(String gender, String education);
 }
 
 class StudentDbRepository implements StudentRepository {
@@ -134,5 +137,38 @@ class StudentDbRepository implements StudentRepository {
     final result = await db.rawQuery(query,[gender, education]);
     await db.close();
     return result;
+  }
+
+  @override
+  Future<int> countByEducation(String education) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT COUNT(*) FROM ${StudentTable.tableName} WHERE ${StudentTable.educationField}=?";
+    final result = await db.rawQuery(query,[education]);
+    int? count = Sqflite.firstIntValue(result);
+    await db.close();
+    if (count != null) return count;
+    return 0;
+  }
+
+  @override
+  Future<int> countByGender(String gender) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=?";
+    final result = await db.rawQuery(query,[gender]);
+    int? count = Sqflite.firstIntValue(result);
+    await db.close();
+    if (count != null) return count;
+    return 0;
+  }
+
+  @override
+  Future<int> countByGenderAndEducation(String gender, String education) async {
+    final db = await _openHelper.getDatabase();
+    const query = "SELECT * FROM ${StudentTable.tableName} WHERE ${StudentTable.genderField}=? AND ${StudentTable.educationField}=?";
+    final result = await db.rawQuery(query,[gender, education]);
+    int? count = Sqflite.firstIntValue(result);
+    await db.close();
+    if (count != null) return count;
+    return 0;
   }
 }
