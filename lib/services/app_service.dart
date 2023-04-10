@@ -8,10 +8,10 @@ import 'package:sekolah_ku/services/user_service.dart';
 class AppService {
   static final DatabaseOpenHelper _openHelper = DatabaseOpenHelper();
 
-  static final UserRepository _userRepository = UserDummyRepository();
-  static final StudentRepository _studentRepository = StudentDbRepository(_openHelper);
-  static final UserPref _userPref = UserPrefImpl();
+  static UserRepository get _userRepository => UserDummyRepository();
+  static StudentRepository get _studentRepository => StudentDbRepository(_openHelper);
+  static UserPref get _userPref => UserPrefImpl();
 
-  static final StudentService studentService = StudentServiceImpl(_studentRepository);
-  static final UserService userService = UserServiceImpl(_userRepository, _userPref);
+  static StudentService get studentService => StudentServiceImpl(_studentRepository);
+  static UserService get userService => UserServiceImpl(_userRepository, _userPref);
 }
