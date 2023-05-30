@@ -5,12 +5,12 @@ import 'package:sekolah_ku/resources/dimen_res.dart';
 import '../resources/string_res.dart';
 import 'icon_back_button.dart';
 
-class SearchBar extends StatefulWidget {
+class AppSearchBar extends StatefulWidget {
   final ValueChanged<String>? onValueChanged;
   final TextEditingController controller;
   final VoidCallback onClearTapped;
 
-  const SearchBar({
+  const AppSearchBar({
     super.key,
     this.onValueChanged,
     required this.controller,
@@ -18,10 +18,10 @@ class SearchBar extends StatefulWidget {
   });
 
   @override
-  State<SearchBar> createState() => _SearchBarState();
+  State<AppSearchBar> createState() => _AppSearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _AppSearchBarState extends State<AppSearchBar> {
 
   @override
   Widget build(BuildContext context) {

@@ -65,7 +65,7 @@ class _StudentSearchPageState extends State<StudentSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: SearchBar(
+          title: AppSearchBar(
             controller: _searchCtrl,
             onValueChanged: (s) { setState(() {}); },
             onClearTapped: () { setState(() {}); },
