@@ -155,6 +155,10 @@ class _StudentListPageState extends State<StudentListPage> {
   }
 
   void _showFilterDialog() {
+    if (_students.isEmpty) {
+      context.showErrorSnackBar(StringRes.errNoDataStudents);
+      return;
+    }
     final content = DialogFilterStudent(
       lastSelectedEducation: lastSelectedFilterEducation,
       lastSelectedGender: lastSelectedFilterGender,
