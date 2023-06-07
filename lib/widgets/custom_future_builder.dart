@@ -17,16 +17,19 @@ class SimpleFutureBuilder<T> extends StatelessWidget {
     required this.noDataWidget
   });
 
-  Future<T> getFuture() async {
+  Future<T?> getFuture() async {
     if(useDummyLoading) await Future.delayed(const Duration(seconds: 1));
-    return await future.catchError((e, s) {
+    try {
+      return await future;
+    } catch(e, s) {
       debugError(e, s);
-    });
+      return null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
+    return FutureBuilder<T?>(
         future: getFuture(),
         builder: (context, snapshot) {
           final data = snapshot.data;
@@ -55,17 +58,20 @@ class CustomFutureBuilder<T> extends StatelessWidget {
     this.onErrorFuture
   });
 
-  Future<T> getFuture() async {
+  Future<T?> getFuture() async {
     if(useDummyLoading) await Future.delayed(const Duration(seconds: 1));
-    return await future.catchError((e, s) {
+    try {
+      return await future;
+    } catch(e, s) {
       debugError(e, s);
       onErrorFuture?.call(e, s);
-    });
+      return null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T>(
+    return FutureBuilder<T?>(
         future: getFuture(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
