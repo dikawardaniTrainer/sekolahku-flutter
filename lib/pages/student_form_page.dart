@@ -51,7 +51,7 @@ class _StudentFormPageState extends State<StudentFormPage> {
   final _phoneNumberCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _addressCtrl = TextEditingController();
-  final _genderCtrl = TextEditingController();
+  final _genderCtrl = TextEditingController(text: StringRes.male);
   final _educationCtrl = DropDownController<String>(educationOptions[0]);
   final _hobbiesCtrl = CheckBoxController(hobbiesOptions, []);
 
