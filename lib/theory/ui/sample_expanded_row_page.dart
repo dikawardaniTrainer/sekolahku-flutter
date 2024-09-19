@@ -20,7 +20,7 @@ class SampleExpandedRowPage extends StatelessWidget {
               child: InputField(
                 label: "Satu",
                 textInputType: TextInputType.text,
-                validator: (x) {},
+                validator: (x) { return null; },
               ),
             ),
             const SizedBox(width: 5,),
@@ -28,7 +28,7 @@ class SampleExpandedRowPage extends StatelessWidget {
               child: InputField(
                 label: "Satu",
                 textInputType: TextInputType.text,
-                validator: (x) {},
+                validator: (x) { return null; },
               ),
             ),
           ],

@@ -45,7 +45,7 @@ dependencies:
   sqflite: ^2.2.4+1
   path: ^1.8.2
   hexcolor: ^3.0.1
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.1.1
   flutter_launcher_icons: ^0.13.0
 
 dev_dependencies:
