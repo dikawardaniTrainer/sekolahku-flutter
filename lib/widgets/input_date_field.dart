@@ -70,6 +70,9 @@ class InputDateField extends StatelessWidget {
         initialDate = date;
       }
     }
+    if (initialDate.isAfter(maxDatePicker)) {
+      initialDate = maxDatePicker;
+    }
     context.showDatePickerDialog(
         initial: initialDate,
         limitFirstDate: minDatePicker,

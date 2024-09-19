@@ -8,7 +8,7 @@ class ThemeRes {
   static const _iconTheme = IconThemeData(color: ColorRes.tealMat);
   static const _appBarTheme = AppBarTheme(
       color: ColorRes.tealMat,
-      titleTextStyle: TextStyle(color: ColorRes.white, fontWeight: FontWeight.bold),
+      titleTextStyle: TextStyle(color: ColorRes.white, fontWeight: FontWeight.bold, fontSize: DimenRes.size_20, fontFamily: FontRes.poppins),
       iconTheme: IconThemeData(color: ColorRes.white)
   );
   static final _inputBorderRadius = BorderRadius.circular(DimenRes.size_16);
@@ -29,6 +29,7 @@ class ThemeRes {
       appBarTheme: _appBarTheme,
       iconTheme: _iconTheme,
       inputDecorationTheme: _inputDecor,
+      dividerTheme: const DividerThemeData(color: ColorRes.tealMat),
       dividerColor: ColorRes.tealMat,
       colorScheme: ColorScheme.fromSwatch(
           backgroundColor: _bgColor(darkMode),
