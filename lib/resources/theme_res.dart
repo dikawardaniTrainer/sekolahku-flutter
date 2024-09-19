@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
@@ -22,7 +20,7 @@ class ThemeRes {
   );
 
   static Brightness _brightness(bool darkMode) => darkMode ? Brightness.dark : Brightness.light;
-  static Color _bgColor(bool darkMode) => darkMode ? ColorRes.grey : ColorRes.white;
+  static Color? _bgColor(bool darkMode) => darkMode ? ColorRes.greyDark : ColorRes.white;
 
   static ThemeData getTheme(bool darkMode) => ThemeData(
       brightness: _brightness(darkMode),
