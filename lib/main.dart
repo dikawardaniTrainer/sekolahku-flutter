@@ -10,13 +10,19 @@ import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final _userService = AppService.userService;
+class MyApp extends StatefulWidget {
 
-  MyApp({super.key});
+  const MyApp({super.key});
+
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  final _userService = AppService.userService;
 
   Widget _startApp(BuildContext context, bool? isLoggedIn) {
     String? initialRoute = isLoggedIn != null && isLoggedIn ? Routes.studentList : Routes.login;
@@ -41,4 +47,5 @@ class MyApp extends StatelessWidget {
         noDataWidget: Container()
     );
   }
+
 }
