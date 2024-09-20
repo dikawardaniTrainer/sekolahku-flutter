@@ -17,8 +17,8 @@ class User {
   }
 
   @override
-  bool operator == (dynamic other) =>
-      other != null && other is User && other.toString() == toString();
+  bool operator == (Object other) =>
+      other is User && other.toString() == toString();
 
   @override
   int get hashCode => Object.hash(username, password, role);
@@ -39,8 +39,8 @@ class Role {
   }
 
   @override
-  bool operator == (dynamic other) =>
-      other != null && other is Role && other.toString() == toString();
+  bool operator == (Object other) =>
+      other is Role && other.toString() == toString();
 
   @override
   int get hashCode => Object.hash(id, name);

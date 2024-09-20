@@ -39,8 +39,8 @@ class Student {
   }
 
   @override
-  bool operator == (dynamic other) =>
-      other != null && other is Student && other.toString() == toString();
+  bool operator == (Object other) =>
+      other is Student && other.toString() == toString();
 
   @override
   int get hashCode => Object.hash(id, firstname, lastname, phoneNumber, email, education, gender, address, gmapsLink, birthDate, hobbies);
