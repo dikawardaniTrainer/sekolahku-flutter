@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:sekolah_ku/theory/ui/sample_button_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_expanded_column_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_expanded_row_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_icon_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_button_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_expanded_column_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_expanded_row_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_icon_page.dart';
 import 'package:sekolah_ku/theory/ui/sample_mapping_data_to_widget.dart';
-import 'package:sekolah_ku/theory/ui/sample_stack_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_text_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_textfield_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_textformfield_page.dart';
-import 'package:sekolah_ku/theory/ui/sample_wrap_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_stack_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_text_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_textfield_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_textformfield_page.dart';
+// import 'package:sekolah_ku/theory/ui/sample_wrap_page.dart';
 
 void main() {
   runApp(const SampleUIApp());
