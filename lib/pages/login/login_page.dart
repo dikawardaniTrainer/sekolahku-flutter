@@ -1,13 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_event.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_bloc.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_state.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_status.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
+import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
@@ -41,24 +47,6 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void _login() {
-    final isValid = _formKey.currentState?.validate();
-    final username = _usernameCtrl.text;
-    final password = _passwordCtrl.text;
-    final role = _roleCtrl.value;
-
-    if (isValid != null && isValid && role != null) {
-      context.showLoadingDialog(
-        message: StringRes.loadingLogin,
-        future: _userService.login(username, password, role),
-        onGetError: (e, s) => context.showErrorSnackBar(e.toString()),
-        onGetResult: (data) => context.startStudentListPage()
-      );
-    } else {
-      context.showErrorSnackBar(StringRes.errSomeInputInvalid);
-    }
-  }
-
   Widget _createForm(List<Role> roles) {
     return SingleChildScrollView(
         child: Form(
@@ -73,24 +61,36 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(DimenRes.size_16),
                   child: Column(
                     children: [
-                      InputEmailField(
-                        label: StringRes.username,
-                        controller: _usernameCtrl,
-                        prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal)
+                      BlocBuilder<LoginBloc, LoginState>(
+                        builder: (c, s) => InputEmailField(
+                          label: StringRes.username,
+                          controller: _usernameCtrl,
+                          prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
+                          onChanged: (input) {
+                            context.read<LoginBloc>().add(UsernameChanged(username: input));
+                          },
+                        ),
                       ),
-                      InputPasswordField(
+                      BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => InputPasswordField(
                         marginTop: DimenRes.size_16,
                         controller: _passwordCtrl,
                         prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
-                      ),
-                      DropDown<Role?>(
+                        onChanged: (input) {
+                          context.read<LoginBloc>().add(PasswordChanged(password: input));
+                        },
+                      )),
+                      BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => DropDown<Role?>(
                           options: roles,
                           controller: _roleCtrl,
                           label: StringRes.role,
                           onDrawItem: (item) => Text(item != null ? item.name : ""),
                           marginTop: DimenRes.size_16,
                           validator: (s) { return _validateRole(s); },
-                          onChanged: (v) { _roleCtrl.value = v; })
+                          onChanged: (v) {
+                            _roleCtrl.value = v;
+                            context.read<LoginBloc>().add(RoleChanged(role: v));
+                            debug("Ganti role  to ${v.toString()}");
+                          }))
                     ],
                   )
               )
@@ -107,12 +107,12 @@ class _LoginPageState extends State<LoginPage> {
           Expanded(child: _createForm(roles)),
           Padding(
             padding: const EdgeInsets.all(DimenRes.size_16),
-            child: Button(
+            child: BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => Button(
               label: StringRes.login,
               marginTop: DimenRes.size_16,
-              onPressed: () => _login(),
+              onPressed: () => context.read<LoginBloc>().add(Submit()),
               enabled: _isContentLoaded,
-            ),
+            )),
           )
         ],
       ),

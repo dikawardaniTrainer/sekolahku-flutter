@@ -3,8 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/args.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
-import 'package:sekolah_ku/pages/login_page.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/login_page.dart';
+import 'package:sekolah_ku/pages/login//login_page.dart';
 import 'package:sekolah_ku/pages/result_page.dart';
 import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';
@@ -40,7 +39,7 @@ extension AppNavigation on BuildContext {
     switch(routeName) {
       case Routes.studentList : return const StudentListPage();
       case Routes.studentSearch: return const StudentSearchPage();
-      case Routes.login: return const LoginPageWithBloc();
+      case Routes.login: return const LoginPage();
       case Routes.studentDetail:
         if (args is Args) {
           final data = args.data;

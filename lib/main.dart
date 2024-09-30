@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_bloc.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_bloc.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/resources/theme_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';

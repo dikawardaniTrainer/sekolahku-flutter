@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sekolah_ku/model/user.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_status.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_status.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 
  class LoginState extends Equatable {

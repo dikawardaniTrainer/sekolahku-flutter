@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_event.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_state.dart';
-import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_status.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_event.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_state.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_status.dart';
 import 'package:sekolah_ku/services/user_service.dart';
 import 'package:sekolah_ku/util/logger.dart';
 
