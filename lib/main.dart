@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
+import 'package:sekolah_ku/pages/login_with_bloc/bloc/login_bloc.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/resources/theme_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -26,13 +28,16 @@ class MyAppState extends State<MyApp> {
 
   Widget _startApp(BuildContext context, bool? isLoggedIn) {
     String? initialRoute = isLoggedIn != null && isLoggedIn ? Routes.studentList : Routes.login;
-    return MaterialApp(
-      title: StringRes.appName,
-      onGenerateRoute: context.getRouteGenerator(),
-      initialRoute: initialRoute,
-      themeMode: ThemeRes.themeMode,
-      darkTheme: ThemeRes.getTheme(true),
-      theme: ThemeRes.getTheme(false),
+    return BlocProvider(
+      create: (c) => LoginBloc(_userService),
+      child: MaterialApp(
+        title: StringRes.appName,
+        onGenerateRoute: context.getRouteGenerator(),
+        initialRoute: initialRoute,
+        themeMode: ThemeRes.themeMode,
+        darkTheme: ThemeRes.getTheme(true),
+        theme: ThemeRes.getTheme(false),
+      ),
     );
   }
 

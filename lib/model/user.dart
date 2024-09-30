@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 
-class User {
+class User extends Equatable {
   String username, password, fullName;
   Role role;
 
@@ -12,23 +13,14 @@ class User {
   });
 
   @override
-  String toString() {
-    return { "username" : username, "password": password, "role": role }.toString();
-  }
-
-  @override
-  bool operator == (Object other) =>
-      other is User && other.toString() == toString();
-
-  @override
-  int get hashCode => Object.hash(username, password, role);
+  List<Object?> get props => [username, password, role];
 }
 
 class Role {
-  int id;
-  String name;
+  final int id;
+  final String name;
 
-  Role({
+  const Role({
     this.id = 0,
     this.name = StringRes.emptyString
   });
