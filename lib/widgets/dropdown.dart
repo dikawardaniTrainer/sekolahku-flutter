@@ -47,7 +47,7 @@ class _DropDownState<T> extends State<DropDown<T>> {
           DropdownButtonFormField<T>(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: widget.validator,
-            value: widget.controller.value,
+            initialValue: widget.controller.value,
             decoration: InputDecoration(
                 labelText: widget.label,
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(DimenRes.size_16))
