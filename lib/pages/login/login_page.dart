@@ -13,7 +13,6 @@ import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/util/form_ext.dart';
-import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
@@ -63,17 +62,13 @@ class _LoginPageState extends State<LoginPage> {
                         label: StringRes.username,
                         controller: _usernameCtrl,
                         prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
-                        onChanged: (input) {
-                          _loginBloc.add(UsernameChanged(username: input));
-                        },
+                        onChanged: (input) => _loginBloc.add(UsernameChanged(username: input)),
                       ),
                       InputPasswordField(
                         marginTop: DimenRes.size_16,
                         controller: _passwordCtrl,
                         prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
-                        onChanged: (input) {
-                          _loginBloc.add(PasswordChanged(password: input));
-                        },
+                        onChanged: (input) => _loginBloc.add(PasswordChanged(password: input)),
                       ),
                       DropDown<Role?>(
                           options: roles,
@@ -85,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
                           onChanged: (v) {
                             _roleCtrl.value = v;
                             _loginBloc.add(RoleChanged(role: v));
-                            debug("Ganti role  to ${v.toString()}");
                           })
                     ],
                   )
