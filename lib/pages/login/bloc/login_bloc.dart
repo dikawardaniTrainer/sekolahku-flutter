@@ -31,6 +31,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       var newState = state.copyWith(role: event.role);
       emit(newState);
       debug("Role changed to  ${newState.role}");
+      return;
     }
     if (event is Submit) {
       _login(emit);
