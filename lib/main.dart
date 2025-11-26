@@ -28,16 +28,13 @@ class MyAppState extends State<MyApp> {
 
   Widget _startApp(BuildContext context, bool? isLoggedIn) {
     String? initialRoute = isLoggedIn != null && isLoggedIn ? Routes.studentList : Routes.login;
-    return BlocProvider(
-      create: (c) => LoginBloc(_userService),
-      child: MaterialApp(
-        title: StringRes.appName,
-        onGenerateRoute: context.getRouteGenerator(),
-        initialRoute: initialRoute,
-        themeMode: ThemeRes.themeMode,
-        darkTheme: ThemeRes.getTheme(true),
-        theme: ThemeRes.getTheme(false),
-      ),
+    return MaterialApp(
+      title: StringRes.appName,
+      onGenerateRoute: context.getRouteGenerator(),
+      initialRoute: initialRoute,
+      themeMode: ThemeRes.themeMode,
+      darkTheme: ThemeRes.getTheme(true),
+      theme: ThemeRes.getTheme(false),
     );
   }
 

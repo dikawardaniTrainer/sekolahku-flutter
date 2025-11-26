@@ -89,6 +89,7 @@ class StringRes {
   static const _errFilterNotFoundsForFull = "No data students has been found with gender %s and education %s";
   static const _errFilterNotFoundsForGender = "No data students has been found with gender %s";
   static const _errFilterNotFoundsForEducation = "No data students has been found with education %s";
+  static const errLogin = "Invalid username or password";
 
   static const successSaveStudent = "Data student saved successfully";
   static const successUpdateStudent = "Data student updated successfully";

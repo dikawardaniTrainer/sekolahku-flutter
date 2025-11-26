@@ -6,7 +6,7 @@ enum RadioOrientation {
   vertical
 }
 
-class RadioGroup extends StatefulWidget {
+class AppRadioGroup extends StatefulWidget {
   final RadioOrientation orientation;
   final List<String> options;
   final ValueChanged<String> onChanged;
@@ -14,7 +14,7 @@ class RadioGroup extends StatefulWidget {
   final double marginTop;
   final TextEditingController controller;
 
-  const RadioGroup({
+  const AppRadioGroup({
     super.key,
     required this.options,
     required this.onChanged,
@@ -25,10 +25,10 @@ class RadioGroup extends StatefulWidget {
   });
 
   @override
-  State<RadioGroup> createState() => _RadioGroupState();
+  State<AppRadioGroup> createState() => _AppRadioGroupState();
 }
 
-class _RadioGroupState extends State<RadioGroup> {
+class _AppRadioGroupState extends State<AppRadioGroup> {
 
   void _updateSelectedOption(String newValue) {
     setState(() {

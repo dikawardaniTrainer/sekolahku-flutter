@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
-import 'package:sekolah_ku/pages/login/bloc/login_event.dart';
 import 'package:sekolah_ku/pages/login/bloc/login_bloc.dart';
+import 'package:sekolah_ku/pages/login/bloc/login_event.dart';
 import 'package:sekolah_ku/pages/login/bloc/login_state.dart';
 import 'package:sekolah_ku/pages/login/bloc/login_status.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
@@ -12,8 +12,10 @@ import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/services/app_service.dart';
+import 'package:sekolah_ku/services/bloc_service.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
 import 'package:sekolah_ku/util/logger.dart';
+import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
@@ -36,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
   final DropDownController<Role?> _roleCtrl = DropDownController(null);
+  final _loginBloc = BlocService.loginBloc;
+  bool _isShowingLoading = false;
 
   List<Role> _roles = [];
   bool get _isContentLoaded => _roles.isNotEmpty;
@@ -61,25 +65,23 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.all(DimenRes.size_16),
                   child: Column(
                     children: [
-                      BlocBuilder<LoginBloc, LoginState>(
-                        builder: (c, s) => InputEmailField(
-                          label: StringRes.username,
-                          controller: _usernameCtrl,
-                          prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
-                          onChanged: (input) {
-                            context.read<LoginBloc>().add(UsernameChanged(username: input));
-                          },
-                        ),
+                      InputEmailField(
+                        label: StringRes.username,
+                        controller: _usernameCtrl,
+                        prefixIcon: const Icon(IconRes.personOutline, color: ColorRes.teal),
+                        onChanged: (input) {
+                          _loginBloc.add(UsernameChanged(username: input));
+                        },
                       ),
-                      BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => InputPasswordField(
+                      InputPasswordField(
                         marginTop: DimenRes.size_16,
                         controller: _passwordCtrl,
                         prefixIcon: const Icon(IconRes.lock, color: ColorRes.teal),
                         onChanged: (input) {
-                          context.read<LoginBloc>().add(PasswordChanged(password: input));
+                          _loginBloc.add(PasswordChanged(password: input));
                         },
-                      )),
-                      BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => DropDown<Role?>(
+                      ),
+                      DropDown<Role?>(
                           options: roles,
                           controller: _roleCtrl,
                           label: StringRes.role,
@@ -88,9 +90,9 @@ class _LoginPageState extends State<LoginPage> {
                           validator: (s) { return _validateRole(s); },
                           onChanged: (v) {
                             _roleCtrl.value = v;
-                            context.read<LoginBloc>().add(RoleChanged(role: v));
+                            _loginBloc.add(RoleChanged(role: v));
                             debug("Ganti role  to ${v.toString()}");
-                          }))
+                          })
                     ],
                   )
               )
@@ -107,16 +109,47 @@ class _LoginPageState extends State<LoginPage> {
           Expanded(child: _createForm(roles)),
           Padding(
             padding: const EdgeInsets.all(DimenRes.size_16),
-            child: BlocBuilder<LoginBloc, LoginState>(builder: (c, s) => Button(
+            child: Button(
               label: StringRes.login,
               marginTop: DimenRes.size_16,
-              onPressed: () => context.read<LoginBloc>().add(Submit()),
+              onPressed: () => _loginBloc.add(Submit()),
               enabled: _isContentLoaded,
-            )),
+            ),
           )
         ],
       ),
     );
+  }
+
+  void _listen(BuildContext context, LoginState state) {
+    final status = state.loginStatus;
+    if (status is LoadingLogin) {
+      _isShowingLoading = true;
+      context.showLoadingDialog(
+        message: StringRes.loadingLogin
+      );
+      return;
+    }
+    if (status is LoginSuccess) {
+      if (_isShowingLoading) {
+        context..goBack()
+          ..startStudentListPage();
+        _isShowingLoading = false;
+        return;
+      }
+      context.startStudentListPage();
+      return;
+    }
+    if (status is LoginFailed) {
+      if (_isShowingLoading) {
+        context..goBack()
+          ..showErrorSnackBar(status.err.toString());
+        _isShowingLoading = false;
+        return;
+      }
+      context.showErrorSnackBar(status.err.toString());
+      return;
+    }
   }
 
   @override
@@ -132,14 +165,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     if (_isContentLoaded) return _createPage(_roles);
     return CustomFutureBuilder<List<Role>>(
-      future: _userService.getRoles(),
-      onShowDataWidget: (data) => _createPage(data),
-      noDataWidget: _createPage([]),
-      onErrorFuture: (e, s) => context.showErrorSnackBar(StringRes.errFetchRoles),
-      loadingWidget: LoadingBlocker(
-        message: StringRes.loadingContents,
-        toBlock: _createPage([]),
-      )
-    );
+        future: _userService.getRoles(),
+        onShowDataWidget: (data) => BlocConsumer<LoginBloc, LoginState>(
+          bloc: _loginBloc,
+          builder: (c, state) => _createPage(data),
+          listener: (c, state) => _listen(c, state)
+        ),
+        noDataWidget: _createPage([]),
+        onErrorFuture: (e, s) =>
+            context.showErrorSnackBar(StringRes.errFetchRoles),
+        loadingWidget: LoadingBlocker(
+          message: StringRes.loadingContents,
+          toBlock: _createPage([]),
+        ));
   }
 }

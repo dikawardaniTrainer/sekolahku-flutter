@@ -33,16 +33,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       debug("Role changed to  ${newState.role}");
     }
     if (event is Submit) {
-      try {
-        emit(state.copyWith(loginStatus: LoadingLogin()));
-        await _userService.login(state.username, state.password, state.role);
-        emit(state.copyWith(loginStatus: LoginSuccess()));
-        debug("Submit login success");
-      } on Exception catch(e) {
-        emit(state.copyWith(loginStatus: LoginFailed(e)));
-        debug("Submit login failed");
-      }
+      _login(emit);
       return;
+    }
+  }
+
+  Future<void> _login(Emitter<LoginState> emit) async {
+    try {
+      emit(state.copyWith(loginStatus: LoadingLogin()));
+      await _userService.login(state.username, state.password, state.role);
+      emit(state.copyWith(loginStatus: LoginSuccess()));
+      debug("Submit login success");
+    } on Exception catch(e) {
+      emit(state.copyWith(loginStatus: LoginFailed(e)));
+      debug("Submit login failed");
     }
   }
 }
