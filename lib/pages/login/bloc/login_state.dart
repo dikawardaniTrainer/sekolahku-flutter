@@ -7,12 +7,14 @@ import 'package:sekolah_ku/resources/string_res.dart';
   final String username, password;
   final Role role;
   final LoginStatus loginStatus;
+  final List<Role> roleOptions;
 
   const LoginState({
     this.username = StringRes.emptyString,
     this.password = StringRes.emptyString,
     this.loginStatus = const Initiate(),
-    this.role = const Role()
+    this.role = const Role(),
+    this.roleOptions = const []
  });
 
   @override
@@ -22,12 +24,14 @@ import 'package:sekolah_ku/resources/string_res.dart';
     String? username,
     String? password,
     Role? role,
-    LoginStatus? loginStatus
+    LoginStatus? loginStatus,
+    List<Role>? roleOptions
   }) => LoginState(
       username: username ?? this.username,
       password: password ?? this.password,
       role: role ?? this.role,
-      loginStatus: loginStatus ?? this.loginStatus
+      loginStatus: loginStatus ?? this.loginStatus,
+      roleOptions: roleOptions ?? this.roleOptions
   );
 
  }

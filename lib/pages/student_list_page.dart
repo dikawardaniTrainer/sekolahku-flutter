@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/di/app_injector.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
-import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
@@ -25,8 +25,8 @@ class StudentListPage extends StatefulWidget {
 }
 
 class _StudentListPageState extends State<StudentListPage> {
-  final _studentService = AppService.studentService;
-  final _userService = AppService.userService;
+  final _studentService = AppInjector.studentService;
+  final _userService = AppInjector.userService;
   List<Student> _students = [];
   String? lastSelectedFilterGender, lastSelectedFilterEducation;
   bool get _isFilterApplied => lastSelectedFilterEducation != null || lastSelectedFilterGender != null;

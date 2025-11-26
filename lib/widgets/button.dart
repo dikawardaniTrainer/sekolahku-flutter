@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
+import 'package:sekolah_ku/util/keyboard_ext.dart';
 
 import '../resources/color_res.dart';
 
@@ -11,6 +12,7 @@ class Button extends StatelessWidget {
   final bool enabled;
   final Color? backgroundColor;
   final Color? textColor;
+  final bool isFormAction;
 
   const Button({
     super.key,
@@ -20,7 +22,8 @@ class Button extends StatelessWidget {
     this.isExpanded = true,
     this.enabled = true,
     this.backgroundColor = ColorRes.tealMat,
-    this.textColor = ColorRes.white
+    this.textColor = ColorRes.white,
+    this.isFormAction = false
   });
 
   @override
@@ -35,7 +38,10 @@ class Button extends StatelessWidget {
               backgroundColor: backgroundColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(DimenRes.size_16))),
-          onPressed: enabled ? onPressed : null,
+          onPressed: enabled ? () {
+            if (isFormAction) context.dismissKeyboard();
+            onPressed();
+          } : null,
           child: Text(
             label,
             style: TextStyle(

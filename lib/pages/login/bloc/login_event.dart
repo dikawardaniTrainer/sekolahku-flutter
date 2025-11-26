@@ -44,3 +44,9 @@ class SetDefaultUser extends LoginEvent {
   @override
   List<Object?> get props => [username, password];
 }
+
+class LoadRoles extends LoginEvent {
+  @override
+  List<Object?> get props => [];
+
+}

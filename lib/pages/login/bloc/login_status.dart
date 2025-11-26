@@ -12,3 +12,10 @@ class LoginFailed extends LoginStatus {
   final Exception err;
   LoginFailed(this.err);
 }
+
+class LoadingGetRoles extends LoginStatus {}
+class GetRolesSuccess extends LoginStatus {}
+class GetRolesFailed extends LoginStatus {
+  final Exception err;
+  GetRolesFailed(this.err);
+}

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:sekolah_ku/di/app_injector.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
-import 'package:sekolah_ku/pages/login/bloc/login_bloc.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/resources/theme_res.dart';
-import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/widgets/custom_future_builder.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +22,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final _userService = AppService.userService;
+  final _userService = AppInjector.userService;
 
   Widget _startApp(BuildContext context, bool? isLoggedIn) {
     String? initialRoute = isLoggedIn != null && isLoggedIn ? Routes.studentList : Routes.login;

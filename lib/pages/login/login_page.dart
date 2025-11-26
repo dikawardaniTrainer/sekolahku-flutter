@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sekolah_ku/di/app_injector.dart';
 import 'package:sekolah_ku/model/user.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/pages/login/bloc/login_bloc.dart';
@@ -11,15 +12,12 @@ import 'package:sekolah_ku/resources/color_res.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
-import 'package:sekolah_ku/services/app_service.dart';
-import 'package:sekolah_ku/services/bloc_service.dart';
-import 'package:sekolah_ku/util/dialog_extension.dart';
+import 'package:sekolah_ku/util/form_ext.dart';
 import 'package:sekolah_ku/util/logger.dart';
 import 'package:sekolah_ku/util/navigation_extension.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/widgets/banner_header.dart';
 import 'package:sekolah_ku/widgets/button.dart';
-import 'package:sekolah_ku/widgets/custom_future_builder.dart';
 import 'package:sekolah_ku/widgets/dropdown.dart';
 import 'package:sekolah_ku/widgets/input_email.dart';
 import 'package:sekolah_ku/widgets/input_password.dart';
@@ -33,16 +31,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _userService = AppService.userService;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
   final DropDownController<Role?> _roleCtrl = DropDownController(null);
-  final _loginBloc = BlocService.loginBloc;
+  final _loginBloc = AppInjector.loginBloc;
   bool _isShowingLoading = false;
-
-  List<Role> _roles = [];
-  bool get _isContentLoaded => _roles.isNotEmpty;
 
   String? _validateRole(Role? role) {
     if (role == null) {
@@ -102,7 +96,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _createPage(List<Role> roles) {
-    _roles = roles;
     return Scaffold(
       body: Column(
         children: [
@@ -112,8 +105,9 @@ class _LoginPageState extends State<LoginPage> {
             child: Button(
               label: StringRes.login,
               marginTop: DimenRes.size_16,
+              isFormAction: true,
               onPressed: () => _loginBloc.add(Submit()),
-              enabled: _isContentLoaded,
+              enabled: roles.isNotEmpty && _formKey.isAllInputValid,
             ),
           )
         ],
@@ -121,15 +115,30 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _listen(BuildContext context, LoginState state) {
-    final status = state.loginStatus;
-    if (status is LoadingLogin) {
-      _isShowingLoading = true;
-      context.showLoadingDialog(
-        message: StringRes.loadingLogin
-      );
+  void _showError(Exception err) {
+    if (_isShowingLoading) {
+      context..goBack()
+        ..showErrorSnackBar(err.toString());
+      _isShowingLoading = false;
       return;
     }
+    context.showErrorSnackBar(err.toString());
+  }
+
+  void _listen(BuildContext context, LoginState state) {
+    final status = state.loginStatus;
+
+    if (status is GetRolesSuccess && _isShowingLoading) {
+      context.goBack();
+      _isShowingLoading = false;
+      return;
+    }
+
+    if (status is GetRolesFailed) {
+      _showError(status.err);
+      return;
+    }
+
     if (status is LoginSuccess) {
       if (_isShowingLoading) {
         context..goBack()
@@ -141,20 +150,30 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     if (status is LoginFailed) {
-      if (_isShowingLoading) {
-        context..goBack()
-          ..showErrorSnackBar(status.err.toString());
-        _isShowingLoading = false;
-        return;
-      }
-      context.showErrorSnackBar(status.err.toString());
+      _showError(status.err);
       return;
     }
+  }
+
+  Widget _createByState(LoginState state) {
+    final status = state.loginStatus;
+
+    if (status is LoadingLogin || status is LoadingGetRoles) {
+      String message = StringRes.loadingLogin;
+      if (status is LoadingGetRoles) message = StringRes.loadingContents;
+
+      return LoadingBlocker(
+        message: message,
+        toBlock: _createPage(state.roleOptions),
+      );
+    }
+    return _createPage(state.roleOptions);
   }
 
   @override
   void initState() {
     super.initState();
+    _loginBloc.add(LoadRoles());
     if (kDebugMode) {
       _usernameCtrl.text = "admin@rc.com";
       _passwordCtrl.text = "admin1";
@@ -164,20 +183,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isContentLoaded) return _createPage(_roles);
-    return CustomFutureBuilder<List<Role>>(
-        future: _userService.getRoles(),
-        onShowDataWidget: (data) => BlocConsumer<LoginBloc, LoginState>(
-          bloc: _loginBloc,
-          builder: (c, state) => _createPage(data),
-          listener: (c, state) => _listen(c, state)
-        ),
-        noDataWidget: _createPage([]),
-        onErrorFuture: (e, s) =>
-            context.showErrorSnackBar(StringRes.errFetchRoles),
-        loadingWidget: LoadingBlocker(
-          message: StringRes.loadingContents,
-          toBlock: _createPage([]),
-        ));
+    return BlocConsumer<LoginBloc, LoginState>(
+      bloc: _loginBloc,
+      builder: (c, state) => _createByState(state),
+      listener: (c, state) => _listen(c, state)
+    );
   }
 }
