@@ -36,6 +36,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       _login(emit);
       return;
     }
+    if (event is SetDefaultUser) {
+      var newState = state.copyWith(username: event.username, password: event.password);
+      emit(newState);
+      return;
+    }
   }
 
   Future<void> _login(Emitter<LoginState> emit) async {

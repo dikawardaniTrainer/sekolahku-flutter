@@ -34,3 +34,13 @@ class Submit extends LoginEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SetDefaultUser extends LoginEvent {
+  final String username;
+  final String? password;
+
+  SetDefaultUser(this.username, this.password);
+
+  @override
+  List<Object?> get props => [username, password];
+}

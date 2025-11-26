@@ -158,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
     if (kDebugMode) {
       _usernameCtrl.text = "admin@rc.com";
       _passwordCtrl.text = "admin1";
+      _loginBloc.add(SetDefaultUser(_usernameCtrl.text, _passwordCtrl.text));
     }
   }
 
