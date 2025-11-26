@@ -3,7 +3,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/args.dart';
 import 'package:sekolah_ku/navigation/routes.dart';
-import 'package:sekolah_ku/pages/login_page.dart';
+import 'package:sekolah_ku/pages/login//login_page.dart';
 import 'package:sekolah_ku/pages/result_page.dart';
 import 'package:sekolah_ku/pages/student_detail_page.dart';
 import 'package:sekolah_ku/pages/student_form_page.dart';

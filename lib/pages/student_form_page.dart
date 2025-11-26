@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/di/app_injector.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/dimen_res.dart';
 import 'package:sekolah_ku/resources/icon_res.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
-import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/constant/student_const.dart';
 import 'package:sekolah_ku/services/exception/exception.dart';
 import 'package:sekolah_ku/util/common_extension.dart';
@@ -42,7 +42,7 @@ class StudentFormPage extends StatefulWidget {
 }
 
 class _StudentFormPageState extends State<StudentFormPage> {
-  final _studentService = AppService.studentService;
+  final _studentService = AppInjector.studentService;
   var _formKey = GlobalKey<FormState>();
 
   final _birthDateCtrl = TextEditingController();

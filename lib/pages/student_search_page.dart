@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sekolah_ku/di/app_injector.dart';
 import 'package:sekolah_ku/model/student.dart';
 import 'package:sekolah_ku/navigation/app_navigation.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
-import 'package:sekolah_ku/services/app_service.dart';
 import 'package:sekolah_ku/util/snackbar_extension.dart';
 import 'package:sekolah_ku/util/state_extension.dart';
 import 'package:sekolah_ku/util/dialog_extension.dart';
@@ -20,7 +20,7 @@ class StudentSearchPage extends StatefulWidget {
 }
 
 class _StudentSearchPageState extends State<StudentSearchPage> {
-  final _studentService = AppService.studentService;
+  final _studentService = AppInjector.studentService;
   final _searchCtrl = TextEditingController();
   List<Student> _students = [];
 

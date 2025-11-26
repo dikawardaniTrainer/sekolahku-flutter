@@ -31,11 +31,11 @@ extension DialogExt on BuildContext {
     );
   }
 
-  void showLoadingDialog<T>({
+  Future<dynamic> showLoadingDialog<T>({
     required String message,
-    required Future<T> future,
-    required OnGetResult<T> onGetResult,
-    required OnGetError onGetError
+    Future<T>? future,
+    OnGetResult<T>? onGetResult,
+    OnGetError? onGetError
   }) async {
     showDialog(
         context: this,
@@ -43,14 +43,16 @@ extension DialogExt on BuildContext {
         builder: (context) => LoadingDialog(message: message)
     );
     if (useDummyLoading) await Future.delayed(const Duration(seconds: 5));
-    try {
-      final result = await future;
-      goBack();
-      onGetResult.call(result);
-    } catch(e, s) {
-      debugError(e, s);
-      goBack();
-      onGetError.call(e, s);
+    if (future != null && onGetResult != null && onGetError != null) {
+      try {
+        final result = await future;
+        goBack();
+        onGetResult.call(result);
+      } catch (e, s) {
+        debugError(e, s);
+        goBack();
+        onGetError.call(e, s);
+      }
     }
   }
 

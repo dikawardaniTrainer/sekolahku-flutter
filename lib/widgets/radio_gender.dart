@@ -17,7 +17,7 @@ class RadioGender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RadioGroup(
+    return AppRadioGroup(
       label: StringRes.gender,
       controller: controller,
       options: genderOptions,
@@ -43,7 +43,7 @@ class RadioGenderFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final options = ["Both"];
     options.addAll(genderOptions);
-    return RadioGroup(
+    return AppRadioGroup(
       label: StringRes.gender,
       controller: controller,
       options: options,

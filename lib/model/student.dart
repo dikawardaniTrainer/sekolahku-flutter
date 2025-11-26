@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:sekolah_ku/resources/string_res.dart';
 import 'package:sekolah_ku/util/date_extension.dart';
 
-class Student {
+class Student extends Equatable{
   var id = -1;
   String firstname, lastname, phoneNumber, email, education, gender, address, gmapsLink;
   DateTime? birthDate;
@@ -39,9 +40,6 @@ class Student {
   }
 
   @override
-  bool operator == (Object other) =>
-      other is Student && other.toString() == toString();
-
-  @override
-  int get hashCode => Object.hash(id, firstname, lastname, phoneNumber, email, education, gender, address, gmapsLink, birthDate, hobbies);
+  // TODO: implement props
+  List<Object?> get props => [id, firstname, lastname, phoneNumber, email, birthDate, education, gender, hobbies, address];
 }

@@ -65,6 +65,7 @@ class _InputPasswordFieldState extends State<InputPasswordField> {
       textInputType: TextInputType.text,
       maxLine: 1,
       obscureText: _obscureText,
+      onChanged: widget.onChanged,
       suffixIcon: IconButton(
           icon: Icon(_iconData),
           color: ColorRes.teal,
